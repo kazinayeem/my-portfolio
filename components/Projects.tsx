@@ -253,7 +253,6 @@ const Projects = () => {
       variants={sectionVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
     >
       <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-gray-100 to-white dark:from-gray-900 dark:to-black opacity-50 z-0 transition-colors duration-500" />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
