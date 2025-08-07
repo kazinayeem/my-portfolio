@@ -1,4 +1,3 @@
-// src/app/page.tsx
 import About from "@/components/aboutme";
 import Contact from "@/components/contact";
 import Hero from "@/components/Hero";
