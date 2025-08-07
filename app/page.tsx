@@ -1,4 +1,5 @@
 import About from "@/components/aboutme";
+import Chat from "@/components/Chat";
 import Contact from "@/components/contact";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
@@ -12,6 +13,7 @@ export default function Home() {
       <Skills />
       <Projects />
       <Contact />
+      <Chat />
     </main>
   );
 }
