@@ -23,7 +23,10 @@ export default function Chat() {
       setPartialReply((prev) => prev + fullText[i]);
       await new Promise((r) => setTimeout(r, 15));
     }
-    setMessages((prev) => [...prev, { id: Date.now(), sender: "ai", text: fullText }]);
+    setMessages((prev) => [
+      ...prev,
+      { id: Date.now(), sender: "ai", text: fullText },
+    ]);
     setPartialReply("");
   };
 
@@ -183,6 +186,44 @@ export default function Chat() {
                   </div>
                 </div>
               )}
+              {/* Dots animation when loading but no partialReply (fallback) */}
+              {loading && !partialReply && (
+                <div className="flex justify-start">
+                  <div className="px-4 py-2 rounded-xl bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white text-sm max-w-[75%] flex items-center space-x-1">
+                    <motion.span
+                      className="inline-block w-2 h-2 bg-current rounded-full"
+                      animate={{ opacity: [0.2, 1, 0.2] }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 1,
+                        ease: "easeInOut",
+                        delay: 0,
+                      }}
+                    />
+                    <motion.span
+                      className="inline-block w-2 h-2 bg-current rounded-full"
+                      animate={{ opacity: [0.2, 1, 0.2] }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 1,
+                        ease: "easeInOut",
+                        delay: 0.2,
+                      }}
+                    />
+                    <motion.span
+                      className="inline-block w-2 h-2 bg-current rounded-full"
+                      animate={{ opacity: [0.2, 1, 0.2] }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 1,
+                        ease: "easeInOut",
+                        delay: 0.4,
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+
               <div ref={messagesEndRef} />
             </div>
 
