@@ -49,10 +49,6 @@ export async function POST(request: Request) {
     const { message } = await request.json();
 
     const prompt = `${CONTEXT}\nUser: ${message}\nAI:`;
-    const history = [
-      { role: "system", parts: [{ text: CONTEXT }] },
-      { role: "user", parts: [{ text: message }] },
-    ];
 
     const res = await ai.models.generateContent({
       model: "gemini-2.5-flash",
