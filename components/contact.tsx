@@ -30,16 +30,28 @@ const Contact = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // In a real application, you would send this data to a backend API
-    // For now, we'll just log it to the console.
-    console.log('Form submitted:', formData);
-    // You might want to add a success message or clear the form
-    setFormData({ name: '', email: '', message: '' });
-    // For a real deployment, consider using a service like Formspree or a serverless function
-    alert('Thank you for your message! I will get back to you soon.');
-  };
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  try {
+    const response = await fetch('/api/sendMessage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      alert('Message sent to Telegram!');
+      setFormData({ name: '', email: '', message: '' });
+    } else {
+      alert('Failed to send message. Try again later.');
+    }
+  } catch (error) {
+    console.error('Error sending message:', error);
+    alert('An error occurred.');
+  }
+};
 
   return (
     <motion.section
