@@ -1,7 +1,112 @@
-import React from 'react'
+"use client";
 
-export default function page() {
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+
+interface Tag {
+  tag: {
+    id: number;
+    name: string;
+    slug: string;
+  };
+}
+
+interface Category {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+interface Post {
+  id: string;
+  title: string;
+  description: string;
+  slug: string;
+  category?: Category;
+  tags: Tag[];
+  createdAt: string;
+  thumbnail?: string | null; // Base64 string
+  thumbnailMime?: string | null;
+}
+
+export default function PostsPage() {
+  const router = useRouter();
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const res = await fetch("/api/blog/");
+        const data = await res.json();
+        setPosts(data);
+      } catch (err) {
+        console.error("Failed to fetch posts", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchPosts();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto p-6 grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {[...Array(6)].map((_, i) => (
+          <Skeleton key={i} className="h-64 w-full rounded-lg" />
+        ))}
+      </div>
+    );
+  }
+
   return (
-    <div>page</div>
-  )
+    <div className="max-w-4xl mx-auto p-6">
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {posts.map((post) => (
+          <Card
+            key={post.id}
+            className="cursor-pointer hover:shadow-lg transition-shadow"
+            onClick={() => router.push(`/blog/${post.slug}`)}
+          >
+            {/* Thumbnail */}
+            {post.thumbnail && post.thumbnailMime && (
+              <div className="relative h-48 w-full">
+                <Image
+                  src={`data:image/png;base64,${post.thumbnail}`}
+                  alt={post.title}
+                  fill
+                  className="object-cover rounded-t-lg"
+                />
+              </div>
+            )}
+
+            <CardHeader className="pt-2">
+              <CardTitle className="text-lg font-semibold">
+                {post.title}
+              </CardTitle>
+              {post.category && (
+                <Badge variant="secondary" className="mt-1">
+                  {post.category.name}
+                </Badge>
+              )}
+            </CardHeader>
+
+            <CardContent>
+              <div className="mt-1 flex flex-wrap gap-1">
+                {post.tags.slice(0, 2).map((t) => (
+                  <Badge key={t.tag.id} variant="outline">
+                    {t.tag.name}
+                  </Badge>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
 }

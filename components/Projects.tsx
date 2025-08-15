@@ -51,13 +51,16 @@ const Projects = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <div className="w-full max-h-60 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-md overflow-hidden mb-4">
+              <div className="w-full h-56 rounded-md overflow-hidden mb-4 relative">
                 <Image
                   src={project.imageSrc}
-                  alt={project.title}
-                  width={400}
-                  height={200}
-                  className="object-contain "
+                  alt={`${project.title} preview`}
+                  fill
+                  className="object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src =
+                      "https://placehold.co/600x400/e0e0e0/333333?text=Image+Error";
+                  }}
                 />
               </div>
 
@@ -143,7 +146,7 @@ const Projects = () => {
                     </DialogHeader>
                     <div className="mt-4">
                       <div className="w-full h-56 rounded-md overflow-hidden mb-4">
-                        <img
+                        <Image
                           src={project.imageSrc}
                           alt={`${project.title} preview`}
                           className="w-full h-full object-cover"
