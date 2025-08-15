@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- Enums ----------
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+// ---------- Models ----------
+model Post {
+  id          String     @id @default(cuid())
+  title       String
+  slug        String     @unique
+  description String?
+  status      PostStatus @default(DRAFT)
+  publishedAt DateTime?
+
+  content Json
+
+  thumbnail     Bytes?
+  thumbnailMime String?
+
+  metaTitle       String?
+  metaDescription String?
+
+  author String @default("ADMIN") // Admin-only author
+
+  categoryId Int?
+  category   Category? @relation(fields: [categoryId], references: [id])
+
+  tags PostTag[]
+
+  readingTime Int?
+  wordCount   Int?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([status, publishedAt])
+  @@index([categoryId])
+}
+
+model Category {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  slug        String  @unique
+  description String?
+
+  posts Post[]
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  slug String @unique
+
+  posts PostTag[]
+}
+
+model PostTag {
+  postId String
+  tagId  Int
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+}

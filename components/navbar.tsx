@@ -1,4 +1,3 @@
-// src/components/Navbar.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -10,45 +9,42 @@ import { MenuIcon, XIcon } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 
 const navItems = [
+  { href: "/", label: "Home" },
   { href: "#about", label: "About" },
   { href: "#skills", label: "Skills" },
   { href: "#projects", label: "Projects" },
   { href: "#github", label: "GitHub" },
   { href: "#contact", label: "Contact" },
+  { href: "/blog", label: "Blog" },
 ];
 
 const Navbar = () => {
   const pathname = usePathname();
-  const [scrollProgress, setScrollProgress] = useState(0); // Renamed for clarity
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Calculate total scrollable height
       const totalHeight =
         document.documentElement.scrollHeight - window.innerHeight;
-      // Calculate current scroll position as a percentage of total height
       const currentProgress = window.scrollY / totalHeight;
-      setScrollProgress(Math.min(1, Math.max(0, currentProgress))); // Ensure it stays between 0 and 1
+      setScrollProgress(Math.min(1, Math.max(0, currentProgress)));
     };
 
     window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:supports-[backdrop-filter]:bg-gray-950/60 border-b border-b-gray-200 dark:border-b-gray-800">
+    <nav className="sticky top-0 z-50 backdrop-blur bg-white/70 dark:bg-gray-900/70 border-b border-b-gray-200 dark:border-b-gray-800">
+      {/* Scroll Progress Bar */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-green-500 z-50 origin-left"
-        style={{ scaleX: scrollProgress }} // Use the new scrollProgress
+        style={{ scaleX: scrollProgress }}
       />
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3 md:py-4 flex items-center justify-between">
         <Link
           href="/"
@@ -57,7 +53,7 @@ const Navbar = () => {
           Mohammad Nayeem
         </Link>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Nav */}
         <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
           {navItems.map((item) => (
             <Link
@@ -65,7 +61,7 @@ const Navbar = () => {
               href={item.href}
               className={`hover:text-green-500 transition-colors ${
                 pathname === item.href
-                  ? "text-green-500"
+                  ? "text-green-500 font-semibold"
                   : "text-gray-600 dark:text-gray-400"
               }`}
             >
@@ -75,7 +71,7 @@ const Navbar = () => {
           <ThemeToggle />
         </div>
 
-        {/* Mobile Navigation Button */}
+        {/* Mobile Menu Button */}
         <div className="md:hidden">
           <button
             onClick={toggleMobileMenu}
@@ -90,30 +86,30 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-white dark:bg-gray-800 py-2 border-b border-gray-200 dark:border-gray-700">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center space-y-3">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`block py-2 hover:text-green-500 transition-colors ${
-                  pathname === item.href
-                    ? "text-green-500"
-                    : "text-gray-600 dark:text-gray-400"
-                }`}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {item.label}
-              </Link>
-            ))}
-            <div className="mt-2">
-              <ThemeToggle />
-            </div>
-          </div>
+      {/* Mobile Menu - Glassmorphic */}
+      <div
+        className={`md:hidden fixed inset-0 z-40 transition-transform duration-300 ${
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="fixed inset-0 bg-white/30 dark:bg-gray-900/30 backdrop-blur-lg shadow-lg rounded-xl m-4 p-6 flex flex-col space-y-4">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`block py-2 text-lg hover:text-green-500 transition-colors ${
+                pathname === item.href
+                  ? "text-green-500 font-semibold"
+                  : "text-gray-800 dark:text-gray-200"
+              }`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              {item.label}
+            </Link>
+          ))}
+          <ThemeToggle />
         </div>
-      )}
+      </div>
     </nav>
   );
 };
