@@ -28,7 +28,7 @@ interface Post {
   category?: Category;
   tags: Tag[];
   createdAt: string;
-  thumbnail?: string | null; 
+  thumbnail?: string | null;
   thumbnailMime?: string | null;
 }
 
@@ -72,7 +72,7 @@ export default function PostDetailsPage() {
 
   if (!post) {
     return (
-      <div className="p-6 text-center text-lg text-gray-500">
+      <div className="p-6 text-center text-lg text-gray-500 dark:text-gray-400">
         Post not found
       </div>
     );
@@ -93,19 +93,26 @@ export default function PostDetailsPage() {
       )}
 
       {/* Title */}
-      <h1 className="text-3xl sm:text-4xl font-extrabold leading-tight mb-4">
+      <h1 className="text-3xl sm:text-4xl font-extrabold leading-tight mb-4 text-gray-900 dark:text-gray-100">
         {post.title}
       </h1>
 
       {/* Meta */}
       <div className="flex flex-wrap items-center gap-2 mb-6">
         {post.category && (
-          <Badge variant="secondary" className="text-sm">
+          <Badge
+            variant="secondary"
+            className="text-sm dark:bg-gray-700 dark:text-gray-200"
+          >
             {post.category.name}
           </Badge>
         )}
         {post.tags.map((tag) => (
-          <Badge key={tag.id} variant="outline" className="text-sm">
+          <Badge
+            key={tag.id}
+            variant="outline"
+            className="text-sm dark:border-gray-600 dark:text-gray-300"
+          >
             {tag.name}
           </Badge>
         ))}
@@ -113,14 +120,14 @@ export default function PostDetailsPage() {
 
       {/* Description */}
       {post.description && (
-        <div className="prose prose-lg max-w-none mb-8 sm:mb-12 text-gray-700">
+        <div className="prose prose-lg max-w-none mb-8 sm:mb-12 text-gray-700 dark:text-gray-300 dark:prose-invert">
           {renderContent(post.description)}
         </div>
       )}
 
       {/* Content */}
       {post.content && (
-        <div className="prose prose-lg max-w-none sm:prose-xl text-gray-800">
+        <div className="prose prose-lg max-w-none sm:prose-xl text-gray-800 dark:text-gray-200 dark:prose-invert">
           {renderContent(post.content)}
         </div>
       )}

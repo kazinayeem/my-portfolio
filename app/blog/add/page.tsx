@@ -120,7 +120,7 @@ export default function NewPostPage() {
       if (!response.ok) throw new Error("Failed to create post");
 
       toast.success("Post published!");
-      router.push("/blog");
+      router.push("/blog/add");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Error creating post");
     } finally {

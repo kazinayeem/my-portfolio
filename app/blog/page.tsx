@@ -1,61 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-
-interface Tag {
-  tag: {
-    id: number;
-    name: string;
-    slug: string;
-  };
-}
-
-interface Category {
-  id: number;
-  name: string;
-  slug: string;
-}
-
-interface Post {
-  id: string;
-  title: string;
-  description: string;
-  slug: string;
-  category?: Category | null;
-  tags?: Tag[] | null;
-  createdAt: string;
-  thumbnail?: string | null;
-  thumbnailMime?: string | null;
-}
+import { useGetPostsQuery } from "@/lib/services/blogApi";
 
 export default function PostsPage() {
   const router = useRouter();
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    async function fetchPosts() {
-      try {
-        const res = await fetch("/api/blog/");
-        if (!res.ok) throw new Error("Failed to fetch posts");
-        const data = await res.json();
-        setPosts(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("Failed to fetch posts", err);
-        setPosts([]);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchPosts();
-  }, []);
+  const { data, isLoading, isError } = useGetPostsQuery({ page, limit: 6 });
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="max-w-4xl mx-auto p-6 grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {[...Array(6)].map((_, i) => (
@@ -65,7 +24,7 @@ export default function PostsPage() {
     );
   }
 
-  if (!posts.length) {
+  if (isError || !data?.data.length) {
     return (
       <div className="max-w-4xl mx-auto p-6 text-center text-gray-500">
         No posts available.
@@ -75,14 +34,13 @@ export default function PostsPage() {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
-        {posts.map((post) => (
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {data.data.map((post) => (
           <Card
             key={post.id}
             className="cursor-pointer hover:shadow-lg transition-shadow"
             onClick={() => router.push(`/blog/${post.slug}`)}
           >
-            {/* Thumbnail */}
             {post.thumbnail && post.thumbnailMime ? (
               <div className="relative h-48 w-full">
                 <Image
@@ -128,6 +86,24 @@ export default function PostsPage() {
             </CardContent>
           </Card>
         ))}
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-between mt-6">
+        <button
+          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+          disabled={page === 1}
+          onClick={() => setPage(page - 1)}
+        >
+          Previous
+        </button>
+        <button
+          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+          disabled={data.data.length < 6}
+          onClick={() => setPage(page + 1)}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
