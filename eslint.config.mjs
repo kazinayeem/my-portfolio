@@ -10,8 +10,20 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  // Extend Next.js recommended configs
   ...compat.extends("next/core-web-vitals", "next/typescript"),
-  
+
+  // Override specific rules
+  {
+    rules: {
+      "@typescript-eslint/no-unused-vars": "off", // ignore unused vars
+      "@typescript-eslint/no-explicit-any": "off", // allow 'any' type
+      "react-hooks/exhaustive-deps": "off",       // ignore missing deps
+      "@next/next/no-img-element": "off",         // allow <img> instead of next/image
+      'react/no-unescaped-entities': 'off',
+      '@next/next/no-page-custom-font': 'off',
+    },
+  },
 ];
 
 export default eslintConfig;

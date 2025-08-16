@@ -1,12 +1,17 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-
-import { MenuIcon, XIcon } from "lucide-react";
+import {
+  Navbar as BaseNavbar,
+  NavBody,
+  NavItems,
+  MobileNav,
+  MobileNavHeader,
+  MobileNavToggle,
+  MobileNavMenu,
+} from "@/components/ui/resizable-navbar";
 import { ThemeToggle } from "./theme-toggle";
+import { usePathname } from "next/navigation";
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -18,100 +23,87 @@ const navItems = [
   { href: "/blog", label: "Blog" },
 ];
 
-const Navbar = () => {
+export default function Navbar() {
   const pathname = usePathname();
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
       const totalHeight =
         document.documentElement.scrollHeight - window.innerHeight;
-      const currentProgress = window.scrollY / totalHeight;
-      setScrollProgress(Math.min(1, Math.max(0, currentProgress)));
+      const progress = window.scrollY / totalHeight;
+      setScrollProgress(Math.min(1, Math.max(0, progress)));
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-
   return (
-    <nav className="sticky top-0 z-50 backdrop-blur bg-white/70 dark:bg-gray-900/70 border-b border-b-gray-200 dark:border-b-gray-800">
-      {/* Scroll Progress Bar */}
+    <div className="fixed top-0 left-0 w-full z-50">
+      {/* Scroll Progress */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-green-500 z-50 origin-left"
+        className="fixed top-0 left-0 right-0 h-1 bg-green-500 origin-left z-50"
         style={{ scaleX: scrollProgress }}
       />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3 md:py-4 flex items-center justify-between">
-        <Link
-          href="/"
-          className="font-bold text-xl text-gray-900 dark:text-gray-100"
-        >
-          Mohammad Nayeem
-        </Link>
-
+      {/* Transparent Navbar without bg and border */}
+      <BaseNavbar className="bg-transparent border-none">
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`hover:text-green-500 transition-colors ${
-                pathname === item.href
-                  ? "text-green-500 font-semibold"
-                  : "text-gray-600 dark:text-gray-400"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
-          <ThemeToggle />
-        </div>
+        <NavBody className="items-center justify-between">
+          <h1 className="font-bold text-xl text-gray-900 dark:text-gray-100">
+            Nayeem
+          </h1>
 
-        {/* Mobile Menu Button */}
-        <div className="md:hidden">
-          <button
-            onClick={toggleMobileMenu}
-            className="text-gray-600 dark:text-gray-400 hover:text-green-500 transition-colors"
+          <NavItems
+            items={navItems.map((item) => ({
+              name: item.label,
+              link: item.href,
+              active: pathname === item.href,
+            }))}
+          />
+
+          <div className="flex items-center gap-4 z-50">
+            <ThemeToggle />
+          </div>
+        </NavBody>
+
+        {/* Mobile Nav */}
+        <MobileNav>
+          <MobileNavHeader>
+            <h1 className="font-bold text-xl text-gray-900 dark:text-gray-100">
+              Nayeem
+            </h1>
+            <MobileNavToggle
+              isOpen={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            />
+          </MobileNavHeader>
+
+          <MobileNavMenu
+            isOpen={isMobileMenuOpen}
+            onClose={() => setIsMobileMenuOpen(false)}
           >
-            {isMobileMenuOpen ? (
-              <XIcon className="h-6 w-6" />
-            ) : (
-              <MenuIcon className="h-6 w-6" />
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Menu - Glassmorphic */}
-      <div
-        className={`md:hidden fixed inset-0 z-40 transition-transform duration-300 ${
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <div className="fixed inset-0 bg-white/30 dark:bg-gray-900/30 backdrop-blur-lg shadow-lg rounded-xl m-4 p-6 flex flex-col space-y-4">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`block py-2 text-lg hover:text-green-500 transition-colors ${
-                pathname === item.href
-                  ? "text-green-500 font-semibold"
-                  : "text-gray-800 dark:text-gray-200"
-              }`}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              {item.label}
-            </Link>
-          ))}
-          <ThemeToggle />
-        </div>
-      </div>
-    </nav>
+            {navItems.map((item, idx) => (
+              <a
+                key={`mobile-${idx}`}
+                href={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`block py-2 ${
+                  pathname === item.href
+                    ? "text-green-500 font-semibold"
+                    : "text-gray-800 dark:text-gray-200"
+                }`}
+              >
+                {item.label}
+              </a>
+            ))}
+            <div className="flex flex-col gap-4 mt-4">
+              <ThemeToggle />
+            </div>
+          </MobileNavMenu>
+        </MobileNav>
+      </BaseNavbar>
+    </div>
   );
-};
-
-export default Navbar;
+}
