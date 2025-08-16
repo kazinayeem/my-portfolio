@@ -7,6 +7,7 @@ import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import Footer from "@/components/footer";
 import { Toaster } from "sonner";
+import { ReduxProvider } from "./StoreProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,11 +31,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
-          {children}
-          <Analytics />
-          <Footer />
-          <Toaster />
+          <ReduxProvider>
+            <Navbar />
+            {children}
+            <Analytics />
+            <Footer />
+            <Toaster />
+          </ReduxProvider>
         </ThemeProvider>
       </body>
     </html>

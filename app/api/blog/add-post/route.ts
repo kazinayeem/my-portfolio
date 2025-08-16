@@ -1,6 +1,11 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+interface TagInput {
+  name: string;
+  slug: string;
+}
+
 export async function POST(req: Request) {
   try {
     const {
@@ -14,9 +19,10 @@ export async function POST(req: Request) {
       status = "DRAFT",
     } = await req.json();
 
+    // Validate required fields
     if (!title || !content) {
       return NextResponse.json(
-        { error: "title and content are required" },
+        { error: "Title and content are required" },
         { status: 400 }
       );
     }
@@ -29,16 +35,14 @@ export async function POST(req: Request) {
 
     // Ensure slug is unique
     const existingPost = await prisma.post.findUnique({ where: { slug } });
-    if (existingPost) {
-      slug += "-" + Date.now(); // append timestamp to make it unique
-    }
+    if (existingPost) slug += "-" + Date.now();
 
-    // Convert Base64 → Bytes
+    // Convert Base64 → Bytes if provided
     const thumbnailBytes = thumbnailBase64
       ? Buffer.from(thumbnailBase64, "base64")
       : null;
 
-    // Prepare category connectOrCreate
+    // Prepare category connectOrCreate if provided
     const categoryData = categorySlug
       ? {
           connectOrCreate: {
@@ -47,6 +51,16 @@ export async function POST(req: Request) {
           },
         }
       : undefined;
+
+    // Prepare tags connectOrCreate
+    const tagData = tags.map((t: TagInput) => ({
+      tag: {
+        connectOrCreate: {
+          where: { slug: t.slug },
+          create: { name: t.name, slug: t.slug },
+        },
+      },
+    }));
 
     // Create post
     const post = await prisma.post.create({
@@ -61,14 +75,7 @@ export async function POST(req: Request) {
         author: "ADMIN", // hardcoded
         category: categoryData,
         tags: {
-          create: tags.map((t: { slug: string; name: string }) => ({
-            tag: {
-              connectOrCreate: {
-                where: { slug: t.slug },
-                create: { name: t.name, slug: t.slug },
-              },
-            },
-          })),
+          create: tagData,
         },
       },
       include: {
