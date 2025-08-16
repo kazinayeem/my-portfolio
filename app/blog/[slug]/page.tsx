@@ -23,12 +23,12 @@ interface Post {
   id: string;
   title: string;
   description: string;
-  content: string; // HTML string
+  content: string;
   slug: string;
   category?: Category;
   tags: Tag[];
   createdAt: string;
-  thumbnail?: string | null; // Base64 string
+  thumbnail?: string | null; 
   thumbnailMime?: string | null;
 }
 
@@ -60,37 +60,52 @@ export default function PostDetailsPage() {
   }, [slug, router]);
 
   if (loading) {
-    return <Skeleton className="h-96 w-full rounded-lg" />;
+    return (
+      <div className="max-w-4xl mx-auto p-6 grid gap-6">
+        <Skeleton className="h-96 w-full rounded-lg" />
+        <Skeleton className="h-8 w-3/4 rounded-lg" />
+        <Skeleton className="h-6 w-1/2 rounded-lg" />
+        <Skeleton className="h-64 w-full rounded-lg" />
+      </div>
+    );
   }
 
   if (!post) {
-    return <div className="p-6 text-center">Post not found</div>;
+    return (
+      <div className="p-6 text-center text-lg text-gray-500">
+        Post not found
+      </div>
+    );
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Thumbnail */}
       {post.thumbnail && post.thumbnailMime && (
-        <div className="relative w-full h-96 mb-6">
+        <div className="relative w-full h-80 sm:h-96 mb-8 rounded-xl overflow-hidden shadow-md">
           <Image
             src={`data:${post.thumbnailMime};base64,${post.thumbnail}`}
             alt={post.title}
             fill
-            className="object-cover rounded-lg"
+            className="object-cover"
           />
         </div>
       )}
 
       {/* Title */}
-      <h1 className="text-3xl font-bold mb-2">{post.title}</h1>
+      <h1 className="text-3xl sm:text-4xl font-extrabold leading-tight mb-4">
+        {post.title}
+      </h1>
 
       {/* Meta */}
-      <div className="flex items-center gap-2 mb-4">
+      <div className="flex flex-wrap items-center gap-2 mb-6">
         {post.category && (
-          <Badge variant="secondary">{post.category.name}</Badge>
+          <Badge variant="secondary" className="text-sm">
+            {post.category.name}
+          </Badge>
         )}
         {post.tags.map((tag) => (
-          <Badge key={tag.id} variant="outline">
+          <Badge key={tag.id} variant="outline" className="text-sm">
             {tag.name}
           </Badge>
         ))}
@@ -98,14 +113,14 @@ export default function PostDetailsPage() {
 
       {/* Description */}
       {post.description && (
-        <div className="prose prose-lg max-w-none mb-4">
+        <div className="prose prose-lg max-w-none mb-8 sm:mb-12 text-gray-700">
           {renderContent(post.description)}
         </div>
       )}
 
       {/* Content */}
       {post.content && (
-        <div className="prose prose-lg max-w-none">
+        <div className="prose prose-lg max-w-none sm:prose-xl text-gray-800">
           {renderContent(post.content)}
         </div>
       )}

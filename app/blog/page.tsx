@@ -26,10 +26,10 @@ interface Post {
   title: string;
   description: string;
   slug: string;
-  category?: Category;
-  tags: Tag[];
+  category?: Category | null;
+  tags?: Tag[] | null;
   createdAt: string;
-  thumbnail?: string | null; // Base64 string
+  thumbnail?: string | null;
   thumbnailMime?: string | null;
 }
 
@@ -42,10 +42,12 @@ export default function PostsPage() {
     async function fetchPosts() {
       try {
         const res = await fetch("/api/blog/");
+        if (!res.ok) throw new Error("Failed to fetch posts");
         const data = await res.json();
-        setPosts(data);
+        setPosts(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Failed to fetch posts", err);
+        setPosts([]);
       } finally {
         setLoading(false);
       }
@@ -63,9 +65,17 @@ export default function PostsPage() {
     );
   }
 
+  if (!posts.length) {
+    return (
+      <div className="max-w-4xl mx-auto p-6 text-center text-gray-500">
+        No posts available.
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
         {posts.map((post) => (
           <Card
             key={post.id}
@@ -73,35 +83,47 @@ export default function PostsPage() {
             onClick={() => router.push(`/blog/${post.slug}`)}
           >
             {/* Thumbnail */}
-            {post.thumbnail && post.thumbnailMime && (
+            {post.thumbnail && post.thumbnailMime ? (
               <div className="relative h-48 w-full">
                 <Image
-                  src={`data:image/png;base64,${post.thumbnail}`}
-                  alt={post.title}
+                  src={`data:${post.thumbnailMime};base64,${post.thumbnail}`}
+                  alt={post.title || "Post Thumbnail"}
                   fill
-                  className="object-cover rounded-t-lg"
+                  className="rounded-t-sm object-cover"
                 />
+              </div>
+            ) : (
+              <div className="h-48 w-full bg-gray-100 flex items-center justify-center rounded-t-sm text-gray-400">
+                No Image
               </div>
             )}
 
             <CardHeader className="pt-2">
               <CardTitle className="text-lg font-semibold">
-                {post.title}
+                {post.title || "Untitled Post"}
               </CardTitle>
-              {post.category && (
+              {post.category ? (
                 <Badge variant="secondary" className="mt-1">
                   {post.category.name}
+                </Badge>
+              ) : (
+                <Badge variant="outline" className="mt-1">
+                  Uncategorized
                 </Badge>
               )}
             </CardHeader>
 
             <CardContent>
               <div className="mt-1 flex flex-wrap gap-1">
-                {post.tags.slice(0, 2).map((t) => (
-                  <Badge key={t.tag.id} variant="outline">
-                    {t.tag.name}
-                  </Badge>
-                ))}
+                {post.tags && post.tags.length > 0 ? (
+                  post.tags.slice(0, 2).map((t) => (
+                    <Badge key={t.tag.id} variant="outline">
+                      {t.tag.name}
+                    </Badge>
+                  ))
+                ) : (
+                  <Badge variant="outline">No Tags</Badge>
+                )}
               </div>
             </CardContent>
           </Card>

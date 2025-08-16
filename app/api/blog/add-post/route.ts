@@ -21,11 +21,17 @@ export async function POST(req: Request) {
       );
     }
 
-    // Generate slug
-    const slug = title
+    // Generate initial slug
+    let slug = title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)+/g, "");
+
+    // Ensure slug is unique
+    const existingPost = await prisma.post.findUnique({ where: { slug } });
+    if (existingPost) {
+      slug += "-" + Date.now(); // append timestamp to make it unique
+    }
 
     // Convert Base64 → Bytes
     const thumbnailBytes = thumbnailBase64
