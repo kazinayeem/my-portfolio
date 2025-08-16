@@ -74,4 +74,5 @@ export const {
   useGetPostsQuery,
   useGetPostBySlugQuery,
   useCreatePostMutation,
+  usePrefetch,
 } = blogApi;

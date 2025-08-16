@@ -58,11 +58,11 @@ export default function PostsPage() {
 
             <CardHeader className="pt-2">
               <CardTitle className="text-lg font-semibold">
-                {post.title || "Untitled Post"}
+                {post.title.slice(0,25) || "Untitled Post"}...
               </CardTitle>
               {post.category ? (
                 <Badge variant="secondary" className="mt-1">
-                  {post.category.name}
+                  {post.category.name.slice(0,20)}..
                 </Badge>
               ) : (
                 <Badge variant="outline" className="mt-1">
