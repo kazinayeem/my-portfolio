@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { renderContent } from "@/components/CodePreview";
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 
 interface Tag {
   id: number;
@@ -94,7 +95,8 @@ export default function PostDetailsPage() {
 
       {/* Title */}
       <h1 className="text-3xl sm:text-4xl font-extrabold leading-tight mb-4 text-gray-900 dark:text-gray-100">
-        {post.title}
+        <TextGenerateEffect words=  {post.title} />
+      
       </h1>
 
       {/* Meta */}
