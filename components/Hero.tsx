@@ -37,7 +37,7 @@ const AboutMe = () => {
   const mobileCode = `
 const AboutMe = () => {
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 ">
       <p>
         Hey, I'm Nayeem. 
         I build modern,
@@ -132,7 +132,7 @@ const AboutMe = () => {
 
       {/* Right section */}
       <motion.div
-        className="flex-1 w-full mt-10 md:mt-0 md:ml-10 px-4 md:px-0"
+        className="flex-1  mt-10 md:mt-0 md:ml-10 px-4 md:px-0"
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, delay: 0.4 }}

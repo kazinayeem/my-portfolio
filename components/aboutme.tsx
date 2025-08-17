@@ -1,7 +1,7 @@
 // src/components/About.tsx
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import {
@@ -26,6 +26,15 @@ const itemVariants = {
 
 const About = () => {
   const resumeDownloadLink = "/Mohammad_Ali_Nayeem_Resume.pdf";
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    // Check if window width is >= 1024px (Tailwind 'lg')
+    const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+    handleResize(); // initial check
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <motion.section
@@ -172,24 +181,25 @@ const About = () => {
           </motion.div>
         </div>
 
-        {/* Macbook Scroll Section */}
-        <div className="mt-20">
-          <MacbookScroll
-            title={
-              <span>
-                Hi! I'm <strong>Mohammad Ali Nayeem</strong> <br />
-                Full-Stack Developer & AI/ML Enthusiast
-              </span>
-            }
-            badge={
-              <a href="https://www.linkedin.com/in/mohammad-alinayeem/">
-                <Badge className="h-10 w-10 -rotate-12 transform" />
-              </a>
-            }
-            src={`/image.png`}
-            showGradient={true}
-          />
-        </div>
+        {isDesktop && (
+          <div className="mt-20">
+            <MacbookScroll
+              title={
+                <span>
+                  Hi! I'm <strong>Mohammad Ali Nayeem</strong> <br />
+                  Full-Stack Developer & AI/ML Enthusiast
+                </span>
+              }
+              badge={
+                <a href="https://www.linkedin.com/in/mohammad-alinayeem/">
+                  <Badge className="h-10 w-10 -rotate-12 transform" />
+                </a>
+              }
+              src={`/image.png`}
+              showGradient={true}
+            />
+          </div>
+        )}
       </div>
     </motion.section>
   );

@@ -36,6 +36,7 @@ export default function Home() {
       {/* Page content */}
       <main className="relative z-10">
         <Hero />
+        
         <About />
         <Skills />
         <ProjectsParallax />

@@ -28,7 +28,7 @@ const Projects = () => {
   return (
     <motion.section
       id="projects"
-      className="py-20 bg-white dark:bg-gray-950 text-gray-900 dark:text-white relative overflow-hidden transition-colors duration-500"
+      className="py-20 bg-transparent dark:bg-transparent text-gray-900 dark:text-white relative overflow-hidden transition-colors duration-500"
       variants={sectionVariants}
       initial="hidden"
       whileInView="visible"
