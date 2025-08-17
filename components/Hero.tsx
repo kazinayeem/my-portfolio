@@ -87,12 +87,14 @@ const AboutMe = () => {
   const mobileCode = `
 const AboutMe = () => {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex gap-2">
       <p>
         Hey, I'm Nayeem. 
-        I build modern,scalable 
-        web applications using
-        the latest tech.
+        I build modern,
+        scalable 
+        web applications 
+        using the latest
+         tech.
       </p>
     </div>
   );
