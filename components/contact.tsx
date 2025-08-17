@@ -56,7 +56,7 @@ const Contact = () => {
   return (
     <motion.section
       id="contact"
-      className="py-20 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-500"
+      className="py-20 bg-transparent dark:bg-transparent text-gray-900 dark:text-white transition-colors duration-500"
       variants={sectionVariants}
       initial="hidden"
       whileInView="visible"

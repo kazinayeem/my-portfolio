@@ -28,7 +28,10 @@ export interface Project {
   isTeamProject: boolean;
 }
 
-export const techIcons: { [key: string]: React.ElementType } = {
+export const techIcons: Record<
+  string,
+  React.ComponentType<{ className?: string }>
+> = {
   "Next.js": SiNextdotjs,
   Prisma: SiPrisma,
   "Express.js": SiExpress,
@@ -41,13 +44,14 @@ export const techIcons: { [key: string]: React.ElementType } = {
   Docker: SiDocker,
   AWS: SiAmazonaws,
   JavaScript: SiJavascript,
-  "Chrome API": SiJavascript, // Using JS icon for Chrome API
-  SSLCommerz: ExternalLink, // No direct icon, using external link as placeholder
-  JWT: ArrowRight, // No direct icon, using generic arrow as placeholder
-  "Gemini AI": ArrowRight, // No direct icon, using generic arrow as placeholder
-  "Web Scraping": ArrowRight, // No direct icon, using generic arrow as placeholder
-  Flask: SiPython, // Flask is Python framework
+  "Chrome API": SiJavascript,
+  SSLCommerz: ExternalLink,
+  JWT: ArrowRight,
+  "Gemini AI": ArrowRight,
+  "Web Scraping": ArrowRight,
+  Flask: SiPython,
 };
+
 export const projectsData: Project[] = [
   {
     id: "edemy-ai",

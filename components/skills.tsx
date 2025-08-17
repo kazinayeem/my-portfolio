@@ -2,8 +2,7 @@
 "use client";
 
 import React from "react";
-import {
-   motion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Database,
   Cloud,
@@ -82,7 +81,7 @@ const Skills = () => {
   return (
     <motion.section
       id="skills"
-      className="py-16 bg-gray-100 dark:bg-gray-900"
+      className="py-16 bg-transparent dark:bg-transparent"
       variants={sectionVariants}
       initial="hidden"
       whileInView="visible"

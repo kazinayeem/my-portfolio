@@ -33,6 +33,7 @@ export default function RootLayout({
         >
           <ReduxProvider>
             <Navbar />
+            <br />
             {children}
             <Analytics />
             <Footer />
