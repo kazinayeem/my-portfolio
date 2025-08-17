@@ -6,6 +6,7 @@ import { ArrowRight, Github, Linkedin, Mail } from "lucide-react";
 import { AuroraBackground } from "./ui/aurora-background";
 import { CodeBlock } from "@/components/ui/code-block";
 import { TypeAnimation } from "react-type-animation";
+import { PointerHighlight } from "./ui/pointer-highlight";
 
 const Hero: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -61,7 +62,12 @@ const AboutMe = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          Mohammad Ali <span className="text-green-400">Nayeem</span>
+          Mohammad Ali{" "}
+          <span className="text-green-400">
+            <PointerHighlight>
+              <span>Nayeem</span>
+            </PointerHighlight>
+          </span>
         </motion.h1>
 
         <motion.p

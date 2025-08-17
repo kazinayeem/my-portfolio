@@ -4,13 +4,20 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { DirectionAwareHover } from "@/components/ui/direction-aware-hover";
 import { useGetPostsQuery } from "@/lib/services/blogApi";
+import { LoaderOne } from "@/components/ui/loader";
 
 export default function PostsPage() {
   const router = useRouter();
   const [page, setPage] = useState(1);
   const { data, isLoading, isError } = useGetPostsQuery({ page, limit: 6 });
 
-  if (isLoading) return <p className="text-center mt-10">Loading...</p>;
+  if (isLoading)
+    return (
+      <p className="flex flex-1 h-screen justify-center items-center">
+        {" "}
+        <LoaderOne />
+      </p>
+    );
   if (isError || !data?.data.length)
     return (
       <p className="text-center mt-10 text-gray-500">No posts available.</p>
