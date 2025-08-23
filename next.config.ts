@@ -6,14 +6,14 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "placehold.co" },
-      { protocol: "https", hostname: "i.ibb.co" }
-    ]
-  }
+      { protocol: "https", hostname: "i.ibb.co" },
+    ],
+  },
 };
 
 export default withPWA({
   dest: "public",
   register: true,
   skipWaiting: true,
-  disable: process.env.NODE_ENV === "development"
+  disable: true,
 })(nextConfig);
