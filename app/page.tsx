@@ -1,24 +1,15 @@
-"use client";
-import { useEffect } from "react";
 import About from "@/components/aboutme";
 import Chat from "@/components/Chat";
 import Contact from "@/components/contact";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
 import Skills from "@/components/skills";
-import { usePrefetch } from "@/lib/services/blogApi";
 import { cn } from "@/lib/utils";
 import ProjectsParallax from "@/components/ProjectsParallax";
 import { MotivationSection } from "@/components/QuotesComponents";
 import { GlobeDemo } from "@/components/GithubGlobe";
 
 export default function Home() {
-  const prefetchPosts = usePrefetch("getPosts");
-
-  useEffect(() => {
-    prefetchPosts({ page: 1, limit: 6 });
-  }, [prefetchPosts]);
-
   return (
     <div className="relative min-h-screen min-w-full w-full bg-white dark:bg-black">
       {/* Grid background */}
@@ -31,18 +22,18 @@ export default function Home() {
         )}
       />
       {/* Faded radial overlay */}
-      <div className="pointer-events-none absolute inset-0 bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
+      <div className="pointer-events-none absolute inset-0 bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_40%,black)] dark:bg-black"></div>
 
       {/* Page content */}
       <main className="relative z-10">
         <Hero />
-        
+
         <About />
         <Skills />
         <ProjectsParallax />
         <Projects />
         <MotivationSection />
-        <GlobeDemo/>
+        <GlobeDemo />
         <Contact />
         <Chat />
       </main>

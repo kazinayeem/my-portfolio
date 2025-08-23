@@ -9,13 +9,24 @@ import Footer from "@/components/footer";
 import { Toaster } from "sonner";
 import { ReduxProvider } from "./StoreProvider";
 import Head from "next/head";
-
+import type { Viewport } from "next";
 const inter = Inter({ subsets: ["latin"] });
-
+export const viewport: Viewport = {
+  themeColor: "light",
+};
 export const metadata: Metadata = {
-  title: "Mohammad Ali Nayeem - Portfolio",
-  description:
-    "A personal portfolio website showcasing the work of Mohammad Ali Nayeem.",
+  title: "Mohammad Ali Nayeem",
+  description: "Mohammad Ali Nayeem",
+  generator: "Next.js",
+  manifest: "/manifest.json",
+  keywords: ["nextjs", "next15", "pwa", "Mohammad Ali Nayeem"],
+  themeColor: [{ media: "(prefers-color-scheme: light)", color: "#fff" }],
+  viewport:
+    "minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover",
+  icons: [
+    { rel: "apple-touch-icon", url: "icon-192x192.png" },
+    { rel: "icon", url: "icon-192x192.png" },
+  ],
 };
 
 export default function RootLayout({

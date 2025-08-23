@@ -29,9 +29,8 @@ const About = () => {
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
-    // Check if window width is >= 1024px (Tailwind 'lg')
     const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
-    handleResize(); // initial check
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
