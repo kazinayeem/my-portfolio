@@ -1,19 +1,19 @@
+import withPWA from "next-pwa";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  ignoreBuildErrors: true,
+  reactStrictMode: true,
   images: {
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "placehold.co",
-      },
-      {
-        protocol: "https",
-        hostname: "i.ibb.co",
-      },
-    ],
-  },
+      { protocol: "https", hostname: "placehold.co" },
+      { protocol: "https", hostname: "i.ibb.co" }
+    ]
+  }
 };
 
-export default nextConfig;
+export default withPWA({
+  dest: "public",
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === "development"
+})(nextConfig);

@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Footer from "@/components/footer";
 import { Toaster } from "sonner";
 import { ReduxProvider } from "./StoreProvider";
+import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +25,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <Head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#000000" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+      </Head>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
