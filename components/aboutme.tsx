@@ -1,7 +1,7 @@
 // src/components/About.tsx
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import {
@@ -26,14 +26,14 @@ const itemVariants = {
 
 const About = () => {
   const resumeDownloadLink = "/Mohammad_Ali_Nayeem_Resume.pdf";
-  const [isDesktop, setIsDesktop] = useState(false);
+  // const [isDesktop, setIsDesktop] = useState(false);
 
-  useEffect(() => {
-    const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  // useEffect(() => {
+  //   const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+  //   handleResize();
+  //   window.addEventListener("resize", handleResize);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
   return (
     <motion.section
@@ -180,25 +180,23 @@ const About = () => {
           </motion.div>
         </div>
 
-        {isDesktop && (
-          <div className="mt-20">
-            <MacbookScroll
-              title={
-                <span>
-                  Hi! I'm <strong>Mohammad Ali Nayeem</strong> <br />
-                  Full-Stack Developer & AI/ML Enthusiast
-                </span>
-              }
-              badge={
-                <a href="https://www.linkedin.com/in/mohammad-alinayeem/">
-                  <Badge className="h-10 w-10 -rotate-12 transform" />
-                </a>
-              }
-              src={`/image.png`}
-              showGradient={true}
-            />
-          </div>
-        )}
+        <div className="mt-20">
+          <MacbookScroll
+            title={
+              <span>
+                Hi! I'm <strong>Mohammad Ali Nayeem</strong> <br />
+                Full-Stack Developer & AI/ML Enthusiast
+              </span>
+            }
+            badge={
+              <a href="https://www.linkedin.com/in/mohammad-alinayeem/">
+                <Badge className="h-10 w-10 -rotate-12 transform" />
+              </a>
+            }
+            src={`/image.png`}
+            showGradient={true}
+          />
+        </div>
       </div>
     </motion.section>
   );

@@ -9,11 +9,11 @@ import Footer from "@/components/footer";
 import { Toaster } from "sonner";
 import { ReduxProvider } from "./StoreProvider";
 import Head from "next/head";
-import type { Viewport } from "next";
+import type { Viewport } from 'next'
 const inter = Inter({ subsets: ["latin"] });
 export const viewport: Viewport = {
-  themeColor: "light",
-};
+  themeColor: 'light',
+}
 export const metadata: Metadata = {
   title: "Mohammad Ali Nayeem",
   description: "Mohammad Ali Nayeem",
@@ -50,7 +50,7 @@ export default function RootLayout({
         >
           <ReduxProvider>
             <Navbar />
-            <br />
+            
             {children}
             <Analytics />
             <Footer />

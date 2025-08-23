@@ -40,7 +40,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 min-w-full w-full z-50">
+    <div className="fixed top-0 left-0 min-w-full w-full z-50 bg-transparent">
       {/* Scroll Progress */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-green-500 origin-left z-50"
@@ -104,6 +104,7 @@ export default function Navbar() {
           </MobileNavMenu>
         </MobileNav>
       </BaseNavbar>
+      <br />
     </div>
   );
 }
