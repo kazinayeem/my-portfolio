@@ -179,7 +179,7 @@ const About = () => {
             </div>
           </motion.div>
         </div>
-        {!isDesktop && (
+        {isDesktop && (
           <div className="mt-20">
             <MacbookScroll
               title={
