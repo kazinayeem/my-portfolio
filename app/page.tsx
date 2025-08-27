@@ -24,7 +24,7 @@ export default function Home() {
       />
       
       {/* Faded radial overlay */}
-      <div className="pointer-events-none absolute inset-0 bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_30%,black)] dark:bg-gradient-to-b dark:from-[#0B1120] dark:via-[#0F162E] dark:to-[#1a2336]"></div>
+      <div className="pointer-events-none absolute inset-0 bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-gradient-to-b dark:from-[#0B1120] dark:via-[#0F162E] dark:to-[#1a2336]"></div>
 
       {/* Page content */}
       <main className="relative z-10">

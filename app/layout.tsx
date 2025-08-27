@@ -10,6 +10,7 @@ import Footer from "@/components/footer";
 import { Toaster } from "sonner";
 import { ReduxProvider } from "./StoreProvider";
 import Head from "next/head";
+import { SmoothCursor } from "@/components/ui/smooth-cursor";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
@@ -216,6 +217,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       </Head>
       <body className={inter.className}>
+        <SmoothCursor />
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
