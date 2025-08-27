@@ -10,8 +10,8 @@ import {
   MobileNavToggle,
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
-import { ThemeToggle } from "./theme-toggle";
 import { usePathname } from "next/navigation";
+import { AnimatedThemeToggler } from "@/components/magicui/animated-theme-toggler"; // ✅ use animated toggler
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -64,7 +64,8 @@ export default function Navbar() {
           />
 
           <div className="flex items-center gap-4 z-50">
-            <ThemeToggle />
+            {/* ✅ Replaced with AnimatedThemeToggler */}
+            <AnimatedThemeToggler />
           </div>
         </NavBody>
 
@@ -99,7 +100,8 @@ export default function Navbar() {
               </a>
             ))}
             <div className="flex flex-col gap-4 mt-4">
-              <ThemeToggle />
+              {/* ✅ Replaced in mobile menu too */}
+              <AnimatedThemeToggler />
             </div>
           </MobileNavMenu>
         </MobileNav>
