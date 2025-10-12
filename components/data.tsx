@@ -54,6 +54,47 @@ export const techIcons: Record<
 
 export const projectsData: Project[] = [
   {
+    id: "cafe-pos-system",
+    title: "☕ Cafe POS System",
+    shortDescription:
+      "A modern Point of Sale (POS) system for cafés with real-time order management, role-based access, and reporting dashboards.",
+    fullDescription:
+      "A full-featured Point of Sale (POS) system built with the MERN stack and TypeScript, designed to streamline café operations. It includes real-time order management, detailed dashboard analytics, and role-based permissions for Admin, Barista, and Cashier. Key functionalities include inventory and menu management, staff roles, sales reports, PDF receipt generation, loyalty program tracking, and printer support. The app features an intuitive, responsive UI for smooth order handling and efficient café management.",
+    tech: [
+      "React",
+      "TypeScript",
+      "Redux",
+      "Vite",
+      "Tailwind CSS",
+      "Lucide React",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "Mongoose",
+      "Socket.io",
+      "JWT",
+    ],
+    githubLink: "https://github.com/kazinayeem/-cafe-sync",
+    youtubeDemoLink: "https://www.youtube.com/watch?v=JgM4OJIKdkY",
+    features: [
+      "Real-Time Order Management with Socket.io",
+      "Role-Based Access (Admin, Barista, Cashier)",
+      "Menu & Inventory Management",
+      "Customizable Menu with Categories & Subcategories",
+      "Table & Order Status Tracking",
+      "Comprehensive Sales Reports & Analytics",
+      "PDF Generation for Receipts and Sales Summaries",
+      "Payment & Discount Management",
+      "Customer Loyalty Program",
+      "Search & Filtering for Orders and Reports",
+      "Staff Management with Role Assignment",
+      "Responsive, Intuitive User Interface",
+      "Printer Support for Receipts and Kitchen Tickets",
+    ],
+    imageSrc: "/cafe-pos-cover.png",
+    isTeamProject: false,
+  },
+  {
     id: "edemy-ai",
     title: "Edemy – AI-Powered Online Learning Platform",
     shortDescription:
@@ -71,7 +112,7 @@ export const projectsData: Project[] = [
       "AWS",
     ],
     githubLink: "https://github.com/kazinayeem/udemy-clone",
-    youtubeDemoLink: "https://www.youtube.com/watch?v=your-edemy-demo", // Replace with actual YouTube link
+    youtubeDemoLink: "https://www.youtube.com/watch?v=your-edemy-demo",
     features: [
       "Teacher/Student/Admin dashboards",
       "AI-generated course descriptions (Gemini AI)",

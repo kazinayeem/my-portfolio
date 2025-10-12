@@ -46,7 +46,7 @@ const Hero: React.FC = () => {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <div className="w-full max-w-lg">
+        <div className="w-full max-w-lg self-center m-auto">
           <Terminal>
             <TypingAnimation>&gt; whoami</TypingAnimation>
             <AnimatedSpan className="text-green-500">
@@ -126,14 +126,14 @@ const Hero: React.FC = () => {
       </motion.div>
 
       {/* Right → OrbitingCircles */}
-      <motion.div
+      {/* <motion.div
         className="flex-1 mt-10 md:mt-0 md:ml-10 px-4 md:px-0"
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8 }}
       >
         <OrbitingCirclesDemo />
-      </motion.div>
+      </motion.div> */}
     </section>
   );
 };
