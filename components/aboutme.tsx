@@ -63,7 +63,7 @@ const About = () => {
           >
             <div className="relative">
               <Image
-                src={"/myimage.png"}
+                src={"https://avatars.githubusercontent.com/u/85398213?s=400&u=d886c204f51399babd542b58959a794e23329e2f&v=4"}
                 alt="Mohammad Ali Nayeem Avatar"
                 width={256}
                 height={256}
