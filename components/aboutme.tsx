@@ -193,7 +193,7 @@ const About = () => {
                   <Badge className="h-10 w-10 -rotate-12 transform" />
                 </a>
               }
-              src={`/image.png`}
+              src={`https://avatars.githubusercontent.com/u/85398213?s=400&u=d886c204f51399babd542b58959a794e23329e2f&v=4`}
               showGradient={true}
             />
           </div>
