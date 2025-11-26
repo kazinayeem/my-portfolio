@@ -74,22 +74,22 @@ const About = () => {
                     "https://placehold.co/200x200/cccccc/333333?text=Avatar+Error";
                 }}
               />
-              <motion.span
+              {/* <motion.span
                 className="absolute -top-4 left-1/2 -translate-x-1/2 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.3 }}
               >
                 Software Engineer
-              </motion.span>
-              <motion.span
+              </motion.span> */}
+              {/* <motion.span
                 className="absolute -bottom-4 right-1/2 translate-x-1/2 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.3 }}
               >
                 Student
-              </motion.span>
+              </motion.span> */}
             </div>
           </motion.div>
 
