@@ -63,7 +63,7 @@ const About = () => {
           >
             <div className="relative">
               <Image
-                src={"./myimage.png"}
+                src={"/myimage.png"}
                 alt="Mohammad Ali Nayeem Avatar"
                 width={256}
                 height={256}
@@ -193,7 +193,7 @@ const About = () => {
                   <Badge className="h-10 w-10 -rotate-12 transform" />
                 </a>
               }
-              src={`./myimage.png`}
+              src={`/myimage.png`}
               showGradient={true}
             />
           </div>
