@@ -25,7 +25,7 @@ const itemVariants = {
 };
 
 const About = () => {
-  const resumeDownloadLink = "/CV_of_Nayeem.pdf";
+  const resumeDownloadLink = "/cv_nayeem.pdf";
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
@@ -171,7 +171,7 @@ const About = () => {
                   href={resumeDownloadLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  download="CV_of_Nayeem.pdf"
+                  download="cv_nayeem.pdf"
                 >
                   <Download className="mr-2 h-5 w-5" /> Download CV
                 </a>
