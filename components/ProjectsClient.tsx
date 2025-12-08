@@ -41,13 +41,13 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
   return (
     <motion.section
       id="projects"
-      className="py-20 bg-transparent dark:bg-transparent text-gray-900 dark:text-white relative overflow-hidden transition-colors duration-500"
+      className="py-16 sm:py-20 bg-transparent dark:bg-transparent text-gray-900 dark:text-white relative transition-colors duration-500"
       variants={sectionVariants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
     >
-      <div className="w-[90%] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <h2 className="text-5xl font-extrabold text-center uppercase tracking-widest mb-2">
           Featured Projects
         </h2>
@@ -60,7 +60,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
             <p>No featured projects yet.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {projects.map((project, idx) => (
               <motion.div
                 key={project.id}

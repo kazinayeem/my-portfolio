@@ -17,7 +17,7 @@ const Footer = () => {
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.6 }}
     >
-      <div className="w-[90%] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* About */}
           <motion.div

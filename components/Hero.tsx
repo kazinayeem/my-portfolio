@@ -101,7 +101,7 @@ const Hero: React.FC = () => {
   const emailAddress = "nayeem2305341022@diu.edu.bd";
 
   return (
-    <section className="min-h-screen w-[90%] max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 pb-16 lg:pb-20">
+    <section className="min-h-screen w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 pb-16 lg:pb-20">
       {/* Left → About Me */}
       <motion.div
         className="w-full lg:w-1/2 flex flex-col items-start justify-center"

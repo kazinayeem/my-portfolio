@@ -56,7 +56,7 @@ const ExperienceEducationClient = ({ education, experience, achievements }: Prop
       whileInView="visible"
       viewport={{ once: true, amount: 0.05 }}
     >
-      <div className="w-[90%] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-100 mb-2 uppercase tracking-widest transition-colors duration-500">
           Education & Experience
         </h2>
