@@ -14,6 +14,110 @@ enum PostStatus {
   ARCHIVED
 }
 
+// ---------- Admin User ----------
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ---------- Skills ----------
+model SkillCategory {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  color     String   @default("from-blue-500 to-cyan-500")
+  icon      String   @default("Code")
+  order     Int      @default(0)
+  skills    Skill[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Skill {
+  id         String        @id @default(cuid())
+  name       String
+  icon       String?
+  categoryId String
+  category   SkillCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  order      Int           @default(0)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@unique([name, categoryId])
+}
+
+// ---------- Projects ----------
+model Project {
+  id               String   @id @default(cuid())
+  title            String
+  shortDescription String
+  fullDescription  String   @db.Text
+  imageSrc         String
+  githubLink       String
+  liveLink         String?
+  youtubeDemoLink  String?
+  isTeamProject    Boolean  @default(false)
+  isFeatured       Boolean  @default(false)
+  order            Int      @default(0)
+  technologies     String[] // Array of tech names
+  features         String[] // Array of features
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+// ---------- Education ----------
+model Education {
+  id          String   @id @default(cuid())
+  school      String
+  degree      String
+  year        String
+  description String   @db.Text
+  gpa         String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ---------- Experience ----------
+model Experience {
+  id          String   @id @default(cuid())
+  title       String
+  company     String
+  year        String
+  description String   @db.Text
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ---------- Achievements ----------
+model Achievement {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ---------- Site Settings ----------
+model SiteSettings {
+  id          String  @id @default("main")
+  heroTitle   String  @default("Hi, I'm Kazi Nayeem")
+  heroSubtitle String @default("Full Stack Developer")
+  heroDescription String @db.Text
+  aboutTitle  String  @default("Mohammad Ali Nayeem")
+  aboutDescription String @db.Text
+  email       String  @default("")
+  github      String  @default("")
+  linkedin    String  @default("")
+  resumeUrl   String  @default("")
+  updatedAt   DateTime @updatedAt
+}
+
 // ---------- Models ----------
 model Post {
   id          String     @id @default(cuid())

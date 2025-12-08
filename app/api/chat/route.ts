@@ -4,7 +4,7 @@ import { GoogleGenAI } from "@google/genai";
 import { projectsData } from "@/components/data";
 
 const ai = new GoogleGenAI({
-  apiKey: "AIzaSyA8y2Cxogm3DuVqa6dnAMqcepYtlj3Vmvo", // Replace with your actual key
+  apiKey: "AIzaSyCPYHx4nQXgg6_Nq6vYwyGypFRVTz8oZqA", // Replace with your actual key
 });
 
 const CONTEXT = `

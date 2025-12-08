@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { DirectionAwareHover } from "@/components/ui/direction-aware-hover";
 import { useGetPostsQuery } from "@/lib/services/blogApi";
 import { LoaderOne } from "@/components/ui/loader";
+import MainLayout from "@/components/MainLayout";
 
 export default function PostsPage() {
   const router = useRouter();
@@ -13,18 +14,23 @@ export default function PostsPage() {
 
   if (isLoading)
     return (
-      <p className="flex flex-1 h-screen justify-center items-center">
-        {" "}
-        <LoaderOne />
-      </p>
+      <MainLayout>
+        <p className="flex flex-1 h-screen justify-center items-center">
+          {" "}
+          <LoaderOne />
+        </p>
+      </MainLayout>
     );
   if (isError || !data?.data.length)
     return (
-      <p className="text-center mt-10 text-gray-500">No posts available.</p>
+      <MainLayout>
+        <p className="text-center mt-10 text-gray-500">No posts available.</p>
+      </MainLayout>
     );
 
   return (
-    <div className="max-w-5xl mx-auto p-4 grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-20">
+    <MainLayout>
+      <div className="max-w-5xl mx-auto p-4 grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-20">
       {data.data.map((post) => (
         <div
           key={post.id}
@@ -70,5 +76,6 @@ export default function PostsPage() {
         </button>
       </div>
     </div>
+    </MainLayout>
   );
 }

@@ -18,9 +18,8 @@ const navItems = [
   { href: "/#about", label: "About" },
   { href: "/#skills", label: "Skills" },
   { href: "/#projects", label: "Projects" },
-  { href: "/#github", label: "GitHub" },
+  { href: "/#experience", label: "Experience" },
   { href: "/#contact", label: "Contact" },
-  { href: "/blog", label: "Blog" },
 ];
 
 export default function Navbar() {
@@ -51,10 +50,6 @@ export default function Navbar() {
       <BaseNavbar className="bg-transparent border-none">
         {/* Desktop Nav */}
         <NavBody className="items-center justify-between">
-          <h1 className="font-bold text-xl text-gray-900 dark:text-gray-100">
-            Nayeem
-          </h1>
-
           <NavItems
             items={navItems.map((item) => ({
               name: item.label,
@@ -72,9 +67,6 @@ export default function Navbar() {
         {/* Mobile Nav */}
         <MobileNav>
           <MobileNavHeader>
-            <h1 className="font-bold text-xl text-gray-900 dark:text-gray-100">
-              Nayeem
-            </h1>
             <MobileNavToggle
               isOpen={isMobileMenuOpen}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

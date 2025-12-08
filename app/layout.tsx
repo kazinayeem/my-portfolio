@@ -13,8 +13,37 @@ import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
-  title: "Mohammad Ali Nayeem",
-  description: "Mohammad Ali Nayeem",
+  title: "Mohammad Ali Nayeem | Software Engineer & Full Stack Developer",
+  description: "Portfolio of Mohammad Ali Nayeem - Software Engineering Student at DIU, Full Stack Developer specializing in React, Next.js, Node.js, and modern web technologies. Exploring DevOps, Cloud Architecture, and AI/ML.",
+  keywords: ["Mohammad Ali Nayeem", "Software Engineer", "Full Stack Developer", "React", "Next.js", "Node.js", "TypeScript", "DIU", "Web Developer", "Bangladesh"],
+  authors: [{ name: "Mohammad Ali Nayeem" }],
+  creator: "Mohammad Ali Nayeem",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://nayeem.dev",
+    siteName: "Mohammad Ali Nayeem Portfolio",
+    title: "Mohammad Ali Nayeem | Software Engineer & Full Stack Developer",
+    description: "Full Stack Developer & SWE Student specializing in React, Next.js, Node.js. Building modern web applications with clean code practices.",
+    images: [
+      {
+        url: "/myimage.png",
+        width: 1200,
+        height: 630,
+        alt: "Mohammad Ali Nayeem - Software Engineer",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Mohammad Ali Nayeem | Software Engineer",
+    description: "Full Stack Developer & SWE Student at DIU",
+    images: ["/myimage.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   icons: {
     icon: [{ url: "/favicon-196.png", sizes: "196x196", type: "image/png" }],
     apple: [{ url: "/apple-icon-180.png" }],
@@ -223,11 +252,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ReduxProvider>
-            <Navbar />
-
             {children}
             <Analytics />
-            <Footer />
             <Toaster />
           </ReduxProvider>
         </ThemeProvider>

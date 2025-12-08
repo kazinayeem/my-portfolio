@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { renderContent } from "@/components/CodePreview";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
+import MainLayout from "@/components/MainLayout";
 
 interface Tag {
   id: number;
@@ -62,25 +63,30 @@ export default function PostDetailsPage() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto p-6 grid gap-6">
-        <Skeleton className="h-96 w-full rounded-lg" />
-        <Skeleton className="h-8 w-3/4 rounded-lg" />
-        <Skeleton className="h-6 w-1/2 rounded-lg" />
-        <Skeleton className="h-64 w-full rounded-lg" />
-      </div>
+      <MainLayout>
+        <div className="max-w-4xl mx-auto p-6 grid gap-6">
+          <Skeleton className="h-96 w-full rounded-lg" />
+          <Skeleton className="h-8 w-3/4 rounded-lg" />
+          <Skeleton className="h-6 w-1/2 rounded-lg" />
+          <Skeleton className="h-64 w-full rounded-lg" />
+        </div>
+      </MainLayout>
     );
   }
 
   if (!post) {
     return (
-      <div className="p-6 text-center text-lg text-gray-500 dark:text-gray-400">
-        Post not found
-      </div>
+      <MainLayout>
+        <div className="p-6 text-center text-lg text-gray-500 dark:text-gray-400">
+          Post not found
+        </div>
+      </MainLayout>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <MainLayout>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Thumbnail */}
       {post.thumbnail && post.thumbnailMime && (
         <div className="relative w-full h-80 sm:h-96 mb-8 rounded-xl overflow-hidden shadow-md">
@@ -134,5 +140,6 @@ export default function PostDetailsPage() {
         </div>
       )}
     </div>
+    </MainLayout>
   );
 }
