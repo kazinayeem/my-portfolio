@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 import { Github, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +11,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import Image from "next/image";
 
 interface Project {
   id: string;
@@ -32,20 +30,11 @@ interface ProjectsClientProps {
   projects: Project[];
 }
 
-const sectionVariants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.2 } },
-};
-
 export default function ProjectsClient({ projects }: ProjectsClientProps) {
   return (
-    <motion.section
+    <section
       id="projects"
       className="py-16 sm:py-20 bg-transparent dark:bg-transparent text-gray-900 dark:text-white relative transition-colors duration-500"
-      variants={sectionVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
     >
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <h2 className="text-5xl font-extrabold text-center uppercase tracking-widest mb-2">
@@ -61,15 +50,10 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-            {projects.map((project, idx) => (
-              <motion.div
+            {projects.map((project) => (
+              <div
                 key={project.id}
                 className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-md hover:shadow-xl hover:border-green-500 dark:hover:border-green-400 p-0 flex flex-col transition-all duration-300 overflow-hidden"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                whileHover={{ scale: 1.02 }}
               >
                 {/* Image Container */}
                 <div className="w-full h-48 sm:h-56 overflow-hidden relative bg-gray-200 dark:bg-gray-700">
@@ -236,11 +220,11 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
                     </Dialog>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         )}
       </div>
-    </motion.section>
+    </section>
   );
 }

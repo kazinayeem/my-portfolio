@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import { ArrowRight, Github, Linkedin, Mail } from "lucide-react";
 
 // Animated Terminal Component - Custom built for performance
@@ -42,11 +41,10 @@ const AnimatedTerminal = () => {
       const timer = setTimeout(() => {
         setLines(prev => [...prev, { ...terminalContent[currentLine], visible: true }]);
         setCurrentLine(prev => prev + 1);
-      }, terminalContent[currentLine].delay + (terminalContent[currentLine].text.length * 15));
+      }, terminalContent[currentLine].delay + terminalContent[currentLine].text.length * 8);
       return () => clearTimeout(timer);
-    } else {
-      setIsTyping(false);
     }
+    setIsTyping(false);
   }, [currentLine]);
 
   return (
@@ -63,29 +61,22 @@ const AnimatedTerminal = () => {
       {/* Terminal Body */}
       <div className="p-4 sm:p-5 font-mono text-sm min-h-80 max-h-96 overflow-hidden bg-gray-50 dark:bg-gray-950">
         {lines.map((line, idx) => {
-          // Light mode color mapping
           const lightColorMap: Record<string, string> = {
-            'text-green-400': 'text-green-600 dark:text-green-400',
-            'text-white': 'text-gray-900 dark:text-white',
-            'text-gray-400': 'text-gray-600 dark:text-gray-400',
-            'text-yellow-400': 'text-yellow-600 dark:text-yellow-400',
-            'text-blue-400': 'text-blue-600 dark:text-blue-400',
-            'text-purple-400': 'text-purple-600 dark:text-purple-400',
-            'text-orange-400': 'text-orange-600 dark:text-orange-400',
-            'text-pink-400': 'text-pink-600 dark:text-pink-400',
-            'text-emerald-400': 'text-emerald-600 dark:text-emerald-400',
+            "text-green-400": "text-green-600 dark:text-green-400",
+            "text-white": "text-gray-900 dark:text-white",
+            "text-gray-400": "text-gray-600 dark:text-gray-400",
+            "text-yellow-400": "text-yellow-600 dark:text-yellow-400",
+            "text-blue-400": "text-blue-600 dark:text-blue-400",
+            "text-purple-400": "text-purple-600 dark:text-purple-400",
+            "text-orange-400": "text-orange-600 dark:text-orange-400",
+            "text-pink-400": "text-pink-600 dark:text-pink-400",
+            "text-emerald-400": "text-emerald-600 dark:text-emerald-400",
           };
           const colorClass = lightColorMap[line.color] || line.color;
           return (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.2 }}
-              className={`${colorClass} leading-relaxed`}
-            >
+            <div key={idx} className={`${colorClass} leading-relaxed transition-opacity duration-150`}>
               {line.text || "\u00A0"}
-            </motion.div>
+            </div>
           );
         })}
         {isTyping && (
@@ -103,63 +94,33 @@ const Hero: React.FC = () => {
   return (
     <section className="min-h-screen w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 pb-16 lg:pb-20">
       {/* Left → About Me */}
-      <motion.div
-        className="w-full lg:w-1/2 flex flex-col items-start justify-center"
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8 }}
-      >
+      <div className="w-full lg:w-1/2 flex flex-col items-start justify-center">
         {/* Greeting Badge */}
-        <motion.div
-          className="inline-block mb-6"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-        >
+        <div className="inline-block mb-6">
           <span className="px-4 py-2 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-sm font-semibold">
             👋 Welcome to my portfolio
           </span>
-        </motion.div>
+        </div>
 
         {/* Main Heading */}
-        <motion.h1
-          className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-gray-900 via-green-600 to-blue-600 dark:from-white dark:via-green-400 dark:to-blue-400 bg-clip-text text-transparent mb-4 leading-tight"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-        >
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-gray-900 via-green-600 to-blue-600 dark:from-white dark:via-green-400 dark:to-blue-400 bg-clip-text text-transparent mb-4 leading-tight animate-name-gradient">
           Hi, I&apos;m <span className="block">Mohammad Ali Nayeem</span>
-        </motion.h1>
+        </h1>
 
         {/* Role */}
-        <motion.p
-          className="text-lg sm:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 mb-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-        >
+        <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 mb-6">
           <span className="font-semibold text-green-600 dark:text-green-400">Software Engineer</span> • <span className="font-semibold text-blue-600 dark:text-blue-400">Full Stack Developer</span>
-        </motion.p>
+        </p>
 
         {/* Description */}
-        <motion.div
-          className="max-w-lg mb-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.6 }}
-        >
+        <div className="max-w-lg mb-8">
           <p className="text-base sm:text-lg text-gray-700 dark:text-gray-400 leading-relaxed">
             SWE student at <span className="font-semibold text-purple-600 dark:text-purple-400">DIU</span> building apps with <span className="font-semibold text-green-600 dark:text-green-400">React/Next.js</span> & <span className="font-semibold text-blue-600 dark:text-blue-400">Node.js</span>. Exploring <span className="font-semibold text-orange-600 dark:text-orange-400">DevOps</span>, <span className="font-semibold text-pink-600 dark:text-pink-400">Cloud</span> & <span className="font-semibold text-cyan-600 dark:text-cyan-400">AI/ML</span>.
           </p>
-        </motion.div>
+        </div>
 
         {/* Stats */}
-        <motion.div
-          className="grid grid-cols-3 gap-4 mb-8 w-full"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.6 }}
-        >
+        <div className="grid grid-cols-3 gap-4 mb-8 w-full">
           <div className="text-center p-3 rounded-lg bg-green-50 dark:bg-green-900/20">
             <p className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">5+</p>
             <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Projects</p>
@@ -172,15 +133,10 @@ const Hero: React.FC = () => {
             <p className="text-2xl sm:text-3xl font-bold text-purple-600 dark:text-purple-400">10+</p>
             <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Tech Skills</p>
           </div>
-        </motion.div>
+        </div>
 
         {/* CTA Buttons */}
-        <motion.div
-          className="flex flex-col sm:flex-row flex-wrap items-center gap-3 sm:gap-4 w-full mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.6 }}
-        >
+        <div className="flex flex-col sm:flex-row flex-wrap items-center gap-3 sm:gap-4 w-full mb-8">
           <a
             href="#contact"
             className="w-full sm:w-auto bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3 px-8 rounded-lg flex items-center justify-center gap-2 transition transform hover:scale-105 shadow-lg"
@@ -194,15 +150,10 @@ const Hero: React.FC = () => {
           >
             Download CV
           </a>
-        </motion.div>
+        </div>
 
         {/* Social Links */}
-        <motion.div
-          className="flex items-center gap-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8, duration: 0.6 }}
-        >
+        <div className="flex items-center gap-4">
           <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">Follow me:</span>
           <a
             href={`mailto:${emailAddress}`}
@@ -229,26 +180,21 @@ const Hero: React.FC = () => {
           >
             <Linkedin className="h-5 w-5" />
           </a>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
 
       {/* Right → Animated Terminal */}
-      <motion.div
-        className="w-full lg:w-1/2 flex items-center justify-center lg:justify-end"
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-      >
+      <div className="w-full lg:w-1/2 flex items-center justify-center lg:justify-end">
         <div className="relative w-full max-w-lg">
           {/* Animated gradient background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 via-blue-400/20 to-purple-400/20 dark:from-green-600/20 dark:via-blue-600/20 dark:to-purple-600/20 rounded-2xl blur-3xl animate-pulse" />
+          <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 via-blue-400/20 to-purple-400/20 dark:from-green-600/20 dark:via-blue-600/20 dark:to-purple-600/20 rounded-2xl blur-2xl" />
           
           {/* Custom Animated Terminal */}
           <div className="relative">
             <AnimatedTerminal />
           </div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 };
