@@ -122,15 +122,15 @@ const Hero: React.FC = () => {
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-8 w-full">
           <div className="text-center p-3 rounded-lg bg-green-50 dark:bg-green-900/20">
-            <p className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">5+</p>
+            <p className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">15+</p>
             <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Projects</p>
           </div>
           <div className="text-center p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20">
-            <p className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">2+</p>
+            <p className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">3.5+</p>
             <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Years Coding</p>
           </div>
           <div className="text-center p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20">
-            <p className="text-2xl sm:text-3xl font-bold text-purple-600 dark:text-purple-400">10+</p>
+            <p className="text-2xl sm:text-3xl font-bold text-purple-600 dark:text-purple-400">15+</p>
             <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Tech Skills</p>
           </div>
         </div>
