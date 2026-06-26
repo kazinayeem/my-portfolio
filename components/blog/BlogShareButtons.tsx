@@ -19,7 +19,7 @@ export default function BlogShareButtons({ title, url }: BlogShareButtonsProps) 
   };
 
   return (
-    <div className="flex flex-wrap items-center gap--2" aria-label="Share article">
+    <div className="flex flex-wrap items-center gap-2" aria-label="Share article">
       <span className="mr-2 text-sm font-medium text-gray-600 dark:text-gray-400">
         Share:
       </span>

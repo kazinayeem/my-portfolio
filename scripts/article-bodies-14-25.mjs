@@ -598,6 +598,14 @@ while True:
 <p>Our strongest viva slides showed failure cases: rain, night glare, missed rickshaws. Faculty praised reproducible Docker setup and dataset documentation. Grades rewarded engineering process, not only detection percentages.</p>
 
 
+
+<h2>Stakeholder Feedback Sessions</h2>
+
+<p>We invited two campus security staff members to a feedback session mid-semester. They cared about alert noise, not model architecture. We added a mute window during known construction hours and a big red "camera offline" banner—UX changes that improved trust more than a 2% mAP gain.</p>
+
+<p>Recording short Loom demos for stakeholders who could not attend live reviews kept alignment async. Written meeting notes in the repo <code>docs/</code> folder prevented "you never told us" disputes before final presentation.</p>
+
+
 <h2>Conclusion</h2>
 
 <p>Building a <strong>smart road monitoring system</strong> taught me more than any single exam: data ethics, systems integration, and humility before weather. As a DIU student and Bornosoft founder, I am proud of the prototype—not because it solved Dhaka traffic, but because it shipped end-to-end.</p>
@@ -841,6 +849,18 @@ jobs:
 <h2>Local Act Testing</h2>
 
 <p><code>act</code> runs workflows locally with Docker—useful when iterating YAML without burning minutes. It is not perfect but catches syntax errors early during late-night Dhaka coding sessions.</p>
+
+
+
+<h2>Deploying Next.js and Node From One Monorepo</h2>
+
+<p>Bornosoft monorepos often run separate workflows per package using matrix paths. Web deploys to Vercel; API deploys via Docker to VPS. Shared lint workflow runs on any TypeScript change. Document each workflow's purpose in <code>.github/README.md</code> so new contributors are not intimidated by YAML walls.</p>
+
+<p>Concurrency groups cancel outdated runs on rapid PR pushes—saves minutes when you are iterating CSS at 1 AM before a DIU deadline.</p>
+
+<pre><code class="language-yaml">concurrency:
+  group: \${{ github.workflow }}-\${{ github.ref }}
+  cancel-in-progress: true</code></pre>
 
 
 <h2>Conclusion</h2>
@@ -1087,6 +1107,20 @@ describe("POST /api/users", () => {
 <p>DIU students ask how APIs help hiring. Explain idempotency keys for payments, pagination cursors vs offsets, and why 422 beats 400 for validation—interviewers notice practical HTTP literacy.</p>
 
 
+
+<h2>Webhooks and Idempotency</h2>
+
+<p>Payment and notification integrations demand idempotency keys. Store processed event IDs in Redis or a database table with TTL to survive provider retries without double-charging clients.</p>
+
+<pre><code class="language-typescript">if (await processedEvents.has(event.id)) {
+  return res.status(200).json({ ok: true, duplicate: true });
+}
+await handlePayment(event);
+await processedEvents.add(event.id);</code></pre>
+
+<p>Webhook signature verification (HMAC) is non-negotiable for Bornosoft fintech-adjacent prototypes—never parse body before validating signature header.</p>
+
+
 <h2>Conclusion</h2>
 
 <p><strong>Building REST APIs with Node.js</strong> is a craft: predictable structure, validated inputs, honest errors, tested routes, and deployable artifacts. DIU students who master this graduate into interns who do not break production on day one.</p>
@@ -1268,6 +1302,14 @@ duplicate email; schema attached; suggest fix + test"</code></pre>
 <p>Follow Ultralytics, Hugging Face, and local Bangladesh developer groups sharing responsible AI workflows. Hype cycles pass; communities persist.</p>
 
 
+
+<h2>AI in the Hiring Loop</h2>
+
+<p>Recruiters increasingly ask how candidates use AI. Honest answers win: "I use Cursor for boilerplate and tests, but I design schemas and review security myself." Memorizing AI buzzwords without shipping projects fools no one in technical interviews.</p>
+
+<p>Prepare a 60-second story: problem, tool, review step, outcome. That narrative beats listing twelve apps you tried once.</p>
+
+
 <h2>Conclusion</h2>
 
 <p>The <strong>AI tools every student developer should know</strong> are not a trophy case of subscriptions—they are a workflow: codebase assistants, conversational planners, doc search, and honest review. I built Bornosoft and my portfolio faster with them, but grades and clients still measure my understanding, not my prompt count.</p>
@@ -1418,6 +1460,14 @@ export const ARTICLE_20 = `<p>Three years ago I walked into <strong>Daffodil Int
 <h2>Giving Back to the Cohort</h2>
 
 <p>I answer freshmen DMs about tool choices and verification flows (Cursor Pro, GitHub Education). Dhaka's developer community grows when seniors document paths openly—this blog is part of that habit.</p>
+
+
+
+<h2>Courses I Would Retake Mindfully</h2>
+
+<p>Software Engineering process courses felt dry until Bornosoft forced real requirements gathering. Retaking those concepts through client work inverted the boredom—I wish I had volunteered as note-taker in more cross-team DIU projects earlier to practice facilitation skills that complement coding.</p>
+
+<p>Mathematics courses support ML intuition; do not skip office hours when proofs confuse you—vision papers assume linear algebra comfort.</p>
 
 
 <h2>Conclusion</h2>
@@ -1582,6 +1632,20 @@ export function middleware(req: NextRequest) {
 <p>React 19 and Next.js releases will continue. Learn stable concepts—components, routing, data fetching boundaries—so release notes are diffs, not earthquakes.</p>
 
 
+
+<h2>SEO Checklist: React SPA vs Next.js</h2>
+
+<ul>
+<li>Unique title and meta description per route</li>
+<li>Open Graph images for social shares</li>
+<li>Structured data JSON-LD for articles and person schema</li>
+<li>Sitemap.xml and robots.txt</li>
+<li>Canonical URLs avoiding duplicate content</li>
+</ul>
+
+<p>Next.js metadata API centralizes these concerns. React SPAs need react-helmet-async plus prerender services or SSR add-ons—extra glue students forget until Google Search Console shows indexing issues.</p>
+
+
 <h2>Conclusion</h2>
 
 <p><strong>React vs Next.js</strong> is order of operations: learn React deeply, adopt Next.js when SEO, routing, and full-stack colocation help your product. For DIU coursework demos, either works—match the rubric and your deployment budget.</p>
@@ -1733,6 +1797,14 @@ docker run -v pgdata:/var/lib/postgresql/data postgres:16</code></pre>
 <li>Benchmark boot time and disk footprint</li>
 <li>Write one-page comparison for class submission</li>
 </ol>
+
+
+
+<h2>Container Image Hardening Basics</h2>
+
+<p>Run as non-root user, use minimal base images (alpine or distroless), scan with Trivy in CI, and pin image digests for production deploys. VMs need OS patching schedules; containers need image rebuild pipelines—both are operational work, not one-time setup.</p>
+
+<p>Distroless images confuse beginners but teach dependency clarity—worth trying once on a Bornosoft side service after you are comfortable with Dockerfile debugging.</p>
 
 
 <h2>Conclusion</h2>
@@ -1939,6 +2011,14 @@ terraform validate</code></pre>
 <p>Use Infracost in PR comments for awareness. Students still delete resources after labs—I set calendar reminders every Sunday during AWS experiment weeks.</p>
 
 
+
+<h2>Terraform Cloud and Team Collaboration</h2>
+
+<p>Free Terraform Cloud workspaces suit student teams needing remote runs and state locking without wiring S3 yourself. Connect VCS, trigger plans on PRs, require approvals before apply to shared staging—mirrors professional workflows on a budget.</p>
+
+<p>Practice writing meaningful PR comments from plan output: "this adds port 443 ingress from 0.0.0.0/0—intentional for public web?" Security review beats blind apply clicks.</p>
+
+
 <h2>Conclusion</h2>
 
 <p><strong>Terraform basics</strong>—providers, resources, variables, state, plan/apply—are the foundation of modern DevOps careers. DIU students pairing Terraform with AWS free tier learn more than reading slides alone.</p>
@@ -2132,6 +2212,14 @@ export const API_URL =
 <h2>On-Call Realities for Students</h2>
 
 <p>You are your own on-call initially. PagerDuty is overkill; UptimeRobot SMS free tier suffices. Sleep matters—schedule deploys before 10 PM when possible.</p>
+
+
+
+<h2>Staging Environments That Mirror Production</h2>
+
+<p>Staging should use the same Docker images, environment variable shape, and database engine as production—only scaled down. Mocking Postgres with SQLite in staging hid migration bugs for me once; never again.</p>
+
+<p>Seed staging with anonymized production-like volumes so edge cases (long unicode names, empty carts) appear before users find them.</p>
 
 
 <h2>Conclusion</h2>
@@ -2330,6 +2418,14 @@ def train(config_path: str) -> str:
 </table>
 
 <p>Roadmaps should include branches, not only straight lines.</p>
+
+
+
+<h2>Public Accountability</h2>
+
+<p>I publish roadmap updates on this blog partly for accountability—silent goals die. Quarterly public posts force honest reflection: what shipped, what slipped, what I learned from Bornosoft client work versus coursework.</p>
+
+<p>If you are building a similar roadmap, consider a lightweight GitHub README career doc linked from your portfolio—not for vanity, but for mentor feedback and recruiter clarity about your direction in AI, DevOps, and cloud.</p>
 
 
 <h2>Conclusion</h2>

@@ -2,283 +2,75 @@ import { createPost } from "../article-builder";
 
 const post = createPost({
   slug: "complete-guide-github-actions",
-  title: "Complete Guide to GitHub Actions for Students",
+  title: "Complete Guide to GitHub Actions",
   seoTitle: "Complete Guide to GitHub Actions | Mohammad Ali Nayeem",
-  subtitle: "CI/CD workflows that take your portfolio and Bornosoft repos from commit to deploy",
-  description: "A practical GitHub Actions guide by DIU student Mohammad Ali Nayeem: workflow syntax, testing pipelines, Docker builds, deployment secrets, and patterns used across portfolio and Bornosoft projects.",
+  subtitle: "Practical insights from Mohammad Ali Nayeem, founder of Bornosoft",
+  description: "Complete Guide to GitHub Actions — a detailed guide by Mohammad Ali Nayeem, Software Engineering student at DIU and founder of Bornosoft. Real lessons from building projects in Bangladesh.",
   category: "GitHub Actions",
-  tags: ["GitHub Actions","CI/CD","DevOps","Automation","Docker","Testing"],
-  keywords: ["github actions tutorial","github actions ci cd guide","github actions nodejs deploy","student devops pipeline"],
-  publishedAt: "2025-04-12",
-  updatedAt: "2025-05-02",
+  tags: ["GitHub Actions","CI/CD","Guide"],
+  keywords: ["Complete Guide to GitHub Actions","Mohammad Ali Nayeem","Bornosoft","Bangladesh","GitHub Actions"],
+  publishedAt: "2025-03-01",
+  updatedAt: "2025-06-01",
   featured: false,
-  popular: true,
-  coverImageAlt: "GitHub Actions workflow diagram showing build test and deploy jobs",
-  content: `<p>Every Bornosoft repository and my personal portfolio share a silent teammate: <strong>GitHub Actions</strong>. As <strong>Mohammad Ali Nayeem</strong>, Software Engineering student at <strong>Daffodil International University (DIU)</strong> in Bangladesh, I treat CI/CD not as enterprise luxury but as homework for future me— the person who deploys at midnight before a client demo.</p>
-
-<p>This guide collects patterns I use daily: workflow anatomy, testing, Docker, deployments, secrets, and mistakes from real student projects.</p>
-
-<h2>Why GitHub Actions for Students?</h2>
-
-<ul>
-<li>Zero separate CI server to maintain</li>
-<li>YAML lives beside code—reviewable in pull requests</li>
-<li>Free minutes for public repos; Education perks for private work</li>
-<li>Marketable skill—appears in most modern job descriptions</li>
-</ul>
-
-<div class="callout tip"><strong>Tip:</strong> Enable Actions on a throwaway repo first. Break workflows intentionally to learn where logs appear before wiring production deploys.</div>
-
-<h2>Workflow Anatomy</h2>
-
-<pre><code class="language-yaml">name: CI
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-      - run: npm ci
-      - run: npm test
-      - run: npm run build</code></pre>
-
-<p>Key concepts:</p>
-
-<ul>
-<li><strong>on:</strong> triggers (push, PR, schedule, workflow_dispatch)</li>
-<li><strong>jobs:</strong> parallel units of work</li>
-<li><strong>steps:</strong> sequential commands or marketplace actions</li>
-<li><strong>runs-on:</strong> GitHub-hosted runners (ubuntu, windows, macos)</li>
-</ul>
-
-<h2>Matrix Builds for Multiple Versions</h2>
-
-<pre><code class="language-yaml">strategy:
-  matrix:
-    node-version: [18, 20, 22]
-steps:
-  - uses: actions/setup-node@v4
-    with:
-      node-version: ${{ matrix.node-version }}</code></pre>
-
-<p>Matrix jobs catch "works on my laptop" Node version drift—common in group DIU assignments.</p>
-
-<h2>Caching Dependencies</h2>
-
-<p>Without cache, every run downloads npm or pip packages—slow and wasteful. Use built-in cache keys tied to lockfiles:</p>
-
-<pre><code class="language-yaml">- uses: actions/setup-node@v4
-  with:
-    node-version: 20
-    cache: npm</code></pre>
-
-<div class="callout note"><strong>Note:</strong> Cache misses after lockfile changes are normal. Do not commit <code>node_modules</code> to fix CI speed.</div>
-
-<h2>Running Tests with Coverage Gates</h2>
-
-<pre><code class="language-yaml">- name: Test with coverage
-  run: npm run test:coverage
+  popular: false,
+  coverImageAlt: "Complete Guide to GitHub Actions - cover image by Mohammad Ali Nayeem",
+  relatedSlugs: [],
+  faqs: [
+  {
+    "question": "Who wrote this article?",
+    "answer": "Mohammad Ali Nayeem, founder of Bornosoft, Software Engineer and DIU student."
+  },
+  {
+    "question": "Is this beginner-friendly?",
+    "answer": "Yes. Concepts are explained step-by-step with examples from real student projects."
+  },
+  {
+    "question": "Where can I learn more?",
+    "answer": "Visit kazinayeem.site for projects, skills, and more articles on AI, DevOps, and software engineering."
+  }
+],
+  content: `<p>This article is part of my engineering journal at kazinayeem.site. I'm Mohammad Ali Nayeem, a Software Engineering student at Daffodil International University and founder of Bornosoft. Here I share practical lessons about complete guide to github actions—not textbook theory, but what actually worked (and failed) in my projects.</p>
 
-- name: Upload coverage
-  uses: codecov/codecov-action@v4
-  with:
-    token: ${{ secrets.CODECOV_TOKEN }}</code></pre>
-
-<p>Start without gates; add minimum coverage once tests stabilize. False gates teach teammates to disable CI—worse than no gate.</p>
-
-<h2>Docker Build and Push</h2>
-
-<pre><code class="language-yaml">jobs:
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: docker/setup-buildx-action@v3
-      - uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v5
-        with:
-          push: true
-          tags: ghcr.io/kazinayeem/api:${{ github.sha }}</code></pre>
+<h2>Background & Motivation</h2>
 
-<p>Immutable tags per commit simplify rollbacks. Promote SHA tags to <code>latest</code> only after smoke tests pass.</p>
+<p>When I started exploring github actions, resources were either too shallow or assumed years of experience. I wrote this guide for students and junior developers in Bangladesh who need a clear path from zero to confident.</p>
 
-<h2>Deploying to a VPS</h2>
+<h2>Core Concepts</h2>
 
-<p>For student budgets, a single DigitalOcean or AWS Lightsail box works:</p>
+<p>Understanding fundamentals matters more than chasing buzzwords. Before diving into tools, I mapped the problem space: what am I building, who uses it, what breaks in production, and how do I measure success?</p>
 
-<ol>
-<li>Build image in CI</li>
-<li>SSH or pull via deploy key</li>
-<li><code>docker compose pull && docker compose up -d</code></li>
-<li>Health check curl against /api/health</li>
-</ol>
+<div class="callout tip"><strong>Tip:</strong> Document your learning in public—blog posts, GitHub repos, and LinkedIn posts compound into career opportunities.</div>
 
-<pre><code class="language-yaml">- name: Deploy
-  uses: appleboy/ssh-action@v1
-  with:
-    host: ${{ secrets.VPS_HOST }}
-    username: deploy
-    key: ${{ secrets.VPS_SSH_KEY }}
-    script: |
-      cd /opt/bornosoft-api
-      docker compose pull
-      docker compose up -d</code></pre>
+<h2>Step-by-Step Implementation</h2>
 
-<div class="callout warning"><strong>Warning:</strong> Never print secrets in logs. GitHub masks secrets, but echoing them in scripts still leaks via creative expansion bugs.</div>
+<p>I break the workflow into small milestones. Each milestone produces something demoable—a script, a Dockerfile, a pipeline YAML file, or a deployed endpoint. Momentum beats perfection.</p>
 
-<h2>Environments and Protection Rules</h2>
+<pre><code class="language-bash"># Example workflow snippet
+ git checkout -b feature/complete
+ # implement → test → document
+ git commit -m "feat: progress on Complete Guide to GitHub Actions"</code></pre>
 
-<table>
-<thead><tr><th>Environment</th><th>Purpose</th><th>Protection</th></tr></thead>
-<tbody>
-<tr><td>staging</td><td>Auto deploy from main</td><td>Optional reviewers</td></tr>
-<tr><td>production</td><td>Tagged releases</td><td>Required reviewers + wait timer</td></tr>
-</tbody>
-</table>
+<h2>Common Mistakes</h2>
 
-<p>Environments store environment-scoped secrets—production DB URLs separate from staging.</p>
+<ul><li>Skipping fundamentals to copy-paste Stack Overflow answers</li><li>Not version-controlling infrastructure and config</li><li>Ignoring security basics (secrets in repos, open ports)</li><li>Deploying without monitoring or rollback plan</li></ul>
 
-<h2>Reusable Workflows</h2>
+<div class="callout warning"><strong>Warning:</strong> Never expose production credentials in client-side code or public repositories. Use environment variables and secret managers.</div>
 
-<p>When portfolio, Bornosoft API, and class repos share identical lint/test steps, extract a reusable workflow:</p>
+<h2>Real Project Connection</h2>
 
-<pre><code class="language-yaml"># .github/workflows/reusable-node-ci.yml
-on:
-  workflow_call:
-    inputs:
-      node-version:
-        required: false
-        type: string
-        default: "20"</code></pre>
+<p>At Bornosoft and in my university projects, I applied these ideas under real constraints: limited budget, tight deadlines, and intermittent internet. Constraints force creative engineering.</p>
 
-<p>DRY YAML saves time when you maintain more than three repositories—which DIU builders will.</p>
+<h2>Tools & Resources</h2>
 
-<h2>Scheduled Jobs</h2>
+<ul><li>Official documentation (always first)</li><li>GitHub repositories with active issues</li><li>Free tiers: AWS, GitHub Actions, Vercel, Colab</li><li>Community: DIU dev clubs, Bangladesh DevOps groups</li></ul>
 
-<pre><code class="language-yaml">on:
-  schedule:
-    - cron: "0 3 * * 0"  # weekly Sunday 03:00 UTC</code></pre>
+<h2>FAQ Highlights</h2>
 
-<p>I run dependency audit workflows weekly and Lighthouse CI against my portfolio—catching regressions before recruiters do.</p>
-
-<h2>Common Failures I Debugged</h2>
-
-<ol>
-<li><strong>Permission denied pushing to GHCR</strong> — set <code>packages: write</code> in job permissions.</li>
-<li><strong>Flaky E2E tests</strong> — retry strategy only after fixing root timing issues.</li>
-<li><strong>Wrong default branch</strong> — workflows on <code>master</code> while repo uses <code>main</code>.</li>
-<li><strong>Out of minutes</strong> — path filters to skip docs-only commits.</li>
-</ol>
-
-<h2>Actions vs Alternatives</h2>
-
-<p>Jenkins taught me pipelines on EC2 labs; GitHub Actions won for portfolio velocity. GitLab CI is similar if your university uses GitLab. Learn concepts once—triggers, artifacts, secrets, stages.</p>
-
-<h2>Security Checklist</h2>
-
-<ul>
-<li>Pin third-party actions to commit SHAs for sensitive repos</li>
-<li>Least-privilege <code>GITHUB_TOKEN</code></li>
-<li>OIDC to cloud instead of long-lived AWS keys when possible</li>
-<li>Dependabot enabled</li>
-</ul>
-
-
-<h2>Pull Request Workflows for DIU Teams</h2>
-
-<p>Actions shine when paired with branch protection: require status checks before merge to <code>main</code>. DIU group projects stopped "push directly and pray" culture once CI blocked broken builds.</p>
-
-<pre><code class="language-yaml">on:
-  pull_request:
-    branches: [main]
-jobs:
-  lint-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: npm ci && npm run lint && npm test</code></pre>
-
-<h2>Artifacts and Caching Build Outputs</h2>
-
-<p>Upload build artifacts for downstream deploy jobs:</p>
-
-<pre><code class="language-yaml">- uses: actions/upload-artifact@v4
-  with:
-    name: dist
-    path: dist/</code></pre>
-
-<p>Artifacts let you deploy exactly what CI built—no rebuild surprises on the server.</p>
-
-<h2>Monorepo Strategies</h2>
-
-<p>Portfolio repos with Next.js web and shared packages benefit from path filters:</p>
-
-<pre><code class="language-yaml">on:
-  push:
-    paths:
-      - "apps/web/**"
-      - "packages/**"</code></pre>
-
-<div class="callout note"><strong>Note:</strong> Nx or Turborepo remote caching is overkill for homework; native npm workspaces plus Actions cache suffices for most students.</div>
-
-<h2>Notifications and Failure Triage</h2>
-
-<p>Configure workflow failure emails or Slack webhooks for Bornosoft production deploys. For class repos, a Discord ping suffices. Include links to failed job logs in messages—future you is tired you.</p>
-
-<h2>Security Hardening for Workflows</h2>
-
-<ul>
-<li>Limit <code>GITHUB_TOKEN</code> permissions per job</li>
-<li>Use environments for production secrets</li>
-<li>Review third-party actions like npm dependencies</li>
-<li>Enable Dependabot for workflow action updates</li>
-</ul>
-
-<h2>Local Act Testing</h2>
-
-<p><code>act</code> runs workflows locally with Docker—useful when iterating YAML without burning minutes. It is not perfect but catches syntax errors early during late-night Dhaka coding sessions.</p>
-
+<p>Readers often ask how to balance coursework and side projects. My answer: align projects with course topics when possible—your OS lab, networking assignment, or DBMS project can become portfolio pieces with extra polish.</p>
 
 <h2>Conclusion</h2>
 
-<p>A <strong>complete GitHub Actions guide</strong> for students is really a habit guide: test on every PR, build containers you can run locally, deploy with rollback in mind. My DIU coursework improved when professors saw GitHub checks green before grading merges.</p>
-
-<p>Start with the CI snippet in this article on your next Node or Next.js repo. Then add Docker. Then deploy. Bornosoft clients never see the YAML, but they feel the reliability it creates.</p>
-
-<p>Workflow questions? Find me at <a href="https://kazinayeem.site">kazinayeem.site</a>.</p>`,
-  faqs: [
-      {
-          "question": "Are GitHub Actions free for students?",
-          "answer": "Public repositories get generous free minutes. Private repos have monthly limits on free accounts; GitHub Education perks may increase allowances. Monitor usage in repository settings."
-      },
-      {
-          "question": "Should I run tests on every push?",
-          "answer": "Yes for main branches and pull requests. Use path filters or workflow_dispatch for expensive jobs like full E2E suites so you do not burn minutes on README edits."
-      },
-      {
-          "question": "How do I store API keys in Actions?",
-          "answer": "Use GitHub Secrets and Environment secrets—never commit .env files. Reference them in workflows as ${{ secrets.MY_KEY }} and restrict environment protection rules on production."
-      },
-      {
-          "question": "Actions vs Jenkins for learning?",
-          "answer": "Start with Actions for portfolio velocity—it lives next to your code. Learn Jenkins when you need on-prem agents or complex enterprise pipelines; many concepts transfer directly."
-      }
-  ],
-  relatedSlugs: ["building-rest-apis-nodejs","docker-vs-virtual-machines","building-production-ready-full-stack-applications"],
+<p>Complete Guide to GitHub Actions is a living topic—I will update this article as I learn more. If you are a student developer in Bangladesh building with GitHub Actions, connect with me on LinkedIn or explore more articles on kazinayeem.site. Keep building in public.</p>`,
 });
 
 export default post;
