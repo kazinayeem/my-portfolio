@@ -52,7 +52,7 @@ export function getRelatedPosts(
 ): BlogPost[] {
   const explicit = (current.relatedSlugs ?? [])
     .map((slug) => getPostBySlug(posts, slug))
-    .filter((p): p is BlogPost => Boolean(p) && p.slug !== current.slug);
+    .filter((p): p is BlogPost => p !== undefined && p.slug !== current.slug);
 
   if (explicit.length >= limit) return explicit.slice(0, limit);
 
