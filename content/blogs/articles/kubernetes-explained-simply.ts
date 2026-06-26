@@ -238,6 +238,17 @@ spec:
 
 <p>Otherwise ECS Fargate or even EC2 Docker Compose ships faster—velocity matters for student founders.</p>
 
+<h2>Helm and Package Managers (Brief Intro)</h2>
+
+<p>Raw YAML becomes unwieldy across environments. <strong>Helm</strong> packages Kubernetes manifests into charts with templated values for staging vs production. I use Helm on EKS for Bornosoft staging after mastering plain manifests—understand the underlying objects first, then templating saves duplication.</p>
+
+<pre><code class="language-bash">helm repo add bitnami https://charts.bitnami.com/bitnami
+helm install my-redis bitnami/redis --set auth.password=secret
+helm list
+helm upgrade my-redis bitnami/redis -f values-prod.yaml</code></pre>
+
+<p>Helm is optional for DIU labs; <code>kubectl apply -f</code> folders remain the best teaching path.</p>
+
 <h2>Conclusion</h2>
 
 <p><strong>Kubernetes explained simply</strong> still means a learning curve—but the core story is consistent: declare desired state, let controllers reconcile, expose services reliably, roll forward and back with confidence. As a DIU Software Engineering student building Bornosoft in Bangladesh, that mental model opened senior-level infrastructure discussions I would have avoided a year earlier.</p>

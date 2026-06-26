@@ -5,235 +5,223 @@ const post = createPost({
   title: "Lessons Learned Building SaaS Products",
   seoTitle: "Lessons Learned Building SaaS Products | Mohammad Ali Nayeem",
   subtitle:
-    "Hard-won product, technical, and founder lessons from Bornosoft's early SaaS experiments",
+    "Hard-won product and engineering truths from founding Bornosoft as a DIU student",
   description:
-    "Mohammad Ali Nayeem shares lessons learned building SaaS products as a DIU student founder—MVP scope, billing, onboarding, tech debt, customer feedback, and when to kill features.",
+    "Mohammad Ali Nayeem shares lessons learned building SaaS products at Bornosoft—MVP scope, billing, onboarding, tech debt, and customer feedback—as a Software Engineering student in Bangladesh.",
   category: "Software Engineering",
   tags: ["SaaS", "Startup", "Bornosoft", "Product", "Software Engineering"],
   keywords: [
-    "lessons building saas student founder",
-    "saas mvp lessons learned",
-    "bornosoft saas journey",
-    "student startup software engineering",
+    "lessons building saas startup",
+    "saas product lessons student founder",
+    "bornosoft saas experience",
+    "mvp saas Bangladesh",
   ],
   publishedAt: "2025-01-30",
   updatedAt: "2025-02-18",
   featured: false,
   popular: false,
   coverImageAlt:
-    "Founder desk with laptop showing SaaS dashboard wireframes and sticky notes with user feedback",
-  content: `<p>The first time I called a Bornosoft project "SaaS," I felt like a founder in a Netflix documentary—until a potential customer asked for invoicing in Bengali, SSO with Google Workspace, and a uptime SLA I could not meet on a t3.small. Building <strong>SaaS products</strong> as a <strong>Software Engineering student at DIU</strong> taught me that shipping code is maybe thirty percent of the job. The rest is scope discipline, embarrassing billing bugs, onboarding friction, and conversations that humble your architecture diagrams.</p>
+    "Founder desk with laptop showing SaaS dashboard and sticky note roadmap",
+  content: `<p>Building SaaS products as a student founder sounds glamorous in LinkedIn posts: dashboards, MRR graphs, "we shipped Friday." Reality at <strong>Bornosoft</strong> looked more like balancing DIU assignments, debugging payment webhooks at 1 AM, and explaining to a Dhaka shop owner why monthly software subscription beats pirated desktop cracks. I learned product lessons no classroom slide deck delivered.</p>
 
-<p>These are the <strong>lessons learned building SaaS products</strong> at Bornosoft—technical and human—that I wish a senior founder had told me before I spent a semester perfecting admin themes nobody used.</p>
+<p>This article collects <strong>lessons learned building SaaS products</strong>—technical and human—from my journey as <strong>Mohammad Ali Nayeem</strong>, Software Engineering student at <strong>Daffodil International University</strong> and founder of Bornosoft. If you dream of shipping subscription software from Bangladesh, read this before you overbuild your settings page.</p>
 
-<h2>Lesson 1: MVP Means Minimum, Not Mediocre Vision</h2>
+<h2>Lesson 1: MVP Means Minimum Viable, Not Maximum Possible</h2>
 
-<p>My earliest mistake was conflating MVP with "small version of the final empire." I built role-based access control for five roles before a single paying user existed. The real MVP was:</p>
+<p>My first Bornosoft SaaS attempt had user roles, theme customization, notification centers, and a roadmap page—before ten paying users existed. Classic student founder mistake: building for imaginary scale.</p>
+
+<p>What worked later:</p>
 
 <ul>
-<li>One core workflow solved painfully well</li>
-<li>Authentication and data isolation</li>
-<li>Payment or manual invoice for first customers</li>
-<li>Support channel I actually monitored (email, WhatsApp)</li>
+<li>One painful problem solved end-to-end.</li>
+<li>Manual onboarding for first 20 customers.</li>
+<li>Spreadsheet-backed ops where automation could wait.</li>
+<li>Feature flags only when deploy risk required them.</li>
 </ul>
 
-<div class="callout tip"><strong>Tip:</strong> Ask "Can I deliver value Friday with this?" If not, cut scope—not sleep.</div>
-
-<h3>Feature Cut List That Saved Bornosoft v1</h3>
-
-<table>
-<thead><tr><th>Cut</th><th>Why</th><th>Added Later?</th></tr></thead>
-<tbody>
-<tr><td>Custom themes</td><td>No user asked</td><td>No</td></tr>
-<tr><td>Mobile app</td><td>Responsive web enough</td><td>PWA instead</td></tr>
-<tr><td>AI assistant</td><td>Gimmick before core stable</td><td>After retention proved</td></tr>
-<tr><td>Multi-region deploy</td><td>Zero users in EU</td><td>When metrics justified</td></tr>
-</tbody>
-</table>
+<div class="callout tip"><strong>Tip:</strong> If a feature does not unblock revenue or retention in the next 30 days, question it aggressively.</div>
 
 <h2>Lesson 2: Talk to Users Before Optimizing PostgreSQL</h2>
 
-<p>I indexed tables prematurely while ignoring that trial users could not find the "Create Project" button. Qualitative feedback from three Dhaka small businesses reshaped onboarding more than any EXPLAIN ANALYZE:</p>
+<p>I once spent a week indexing queries while churn root cause was confusing Bengali UI copy. Users do not churn because your p95 latency is 120ms instead of 80ms—they churn when they cannot complete their job.</p>
+
+<p>Habits that helped:</p>
 
 <ol>
-<li>Screen-share sessions (free Zoom)</li>
-<li>Written notes—never rely on memory</li>
-<li>Fix top three confusion points before new features</li>
+<li>Monthly 15-minute calls with three active clients.</li>
+<li>Support WhatsApp group with clear boundaries.</li>
+<li>Logging feature requests in public roadmap Notion page.</li>
+<li>Saying "not yet" politely to custom requests off-strategy.</li>
 </ol>
 
-<div class="callout note"><strong>Note:</strong> Bangladeshi SMB users often prefer WhatsApp voice notes over filling long surveys. Meet them where they are.</div>
+<h2>Lesson 3: Billing Integration Is a Feature, Not a Plugin</h2>
 
-<h2>Lesson 3: Billing Will Break Your Soul—Plan Early</h2>
-
-<p>Stripe is excellent; Bangladesh payment realities are messy. Lessons:</p>
-
-<ul>
-<li><strong>Start manual</strong> — Bank transfer + invoice PDF for first clients</li>
-<li><strong>Automate when pain repeats</strong> — Not before</li>
-<li><strong>Test webhooks exhaustively</strong> — Idempotency keys are not optional</li>
-<li><strong>Handle failed payments gracefully</strong> — Grace periods beat instant lockouts</li>
-</ul>
-
-<pre><code class="language-typescript">// Idempotent webhook handler pattern
-async function handleInvoicePaid(event: Stripe.Event) {
-  const invoice = event.data.object as Stripe.Invoice;
-  const existing = await db.webhookEvent.findUnique({
-    where: { id: event.id },
-  });
-  if (existing) return; // already processed
-
-  await db.$transaction([
-    db.webhookEvent.create({ data: { id: event.id, type: event.type } }),
-    db.subscription.update({
-      where: { stripeId: invoice.subscription as string },
-      data: { status: 'active', paidUntil: new Date(invoice.period_end * 1000) },
-    }),
-  ]);
-}</code></pre>
-
-<div class="callout warning"><strong>Warning:</strong> Never store raw card data. Use payment provider hosted fields—PCI scope will crush student projects.</div>
-
-<h2>Lesson 4: Multi-Tenancy Decisions Are Hard to Undo</h2>
-
-<p>I chose <strong>shared database, tenant_id column</strong> for early Bornosoft SaaS—correct for cost and simplicity. Document isolation rules in code reviews:</p>
-
-<pre><code class="language-sql">-- Every query must filter tenant
-SELECT * FROM projects
-WHERE tenant_id = $1 AND id = $2;</code></pre>
-
-<p>Row-level security in Postgres added defense in depth later. Separate databases per tenant can wait until enterprise contracts demand it.</p>
-
-<h2>Lesson 5: Observability Is a Feature</h2>
-
-<p>When a client said "it's slow," I had no metrics—only vibes. Minimum SaaS observability I enforce now:</p>
-
-<ul>
-<li>Structured JSON logs with tenant_id and request_id</li>
-<li>Error tracking (Sentry or open alternatives)</li>
-<li>Uptime checks on /health</li>
-<li>Basic dashboard: error rate, P95 latency, active tenants</li>
-</ul>
-
-<p>Students can start free tiers; the habit matters more than the vendor.</p>
-
-<h2>Lesson 6: Tech Debt Compounds With Every Demo Promise</h2>
-
-<p>"We can add that by Tuesday" became permanent shortcuts. I learned to label debt explicitly in GitHub issues:</p>
-
-<ul>
-<li><strong>P0</strong> — Security, data loss, billing wrong</li>
-<li><strong>P1</strong> — User-blocking bugs</li>
-<li><strong>P2</strong> — Speed and UX polish</li>
-<li><strong>P3</strong> — Nice-to-have demos</li>
-</ul>
-
-<p>Twenty percent of sprint capacity to P2/P3 debt—or the codebase becomes unmaintainable before graduation.</p>
-
-<h2>Lesson 7: Your Stack Should Match Team Size</h2>
-
-<p>Bornosoft solo-founder stack evolved:</p>
+<p>Stripe (or local payment gateways) webhooks, failed payments, proration, and invoice emails consumed more time than our first admin dashboard. Treat billing as core domain:</p>
 
 <table>
-<thead><tr><th>Stage</th><th>Stack Choices</th></tr></thead>
+<thead><tr><th>Area</th><th>Why it matters</th></tr></thead>
 <tbody>
-<tr><td>Prototype</td><td>Next.js full-stack, SQLite or Supabase</td></tr>
-<tr><td>First paying users</td><td>Postgres on RDS, Docker on EC2</td></tr>
-<tr><td>Growth</td><td>CI/CD, staging env, Go workers for heavy jobs</td></tr>
-<tr><td>Not yet</td><td>Microservices, Kafka, multi-region K8s</td></tr>
+<tr><td>Webhook idempotency</td><td>Prevent duplicate provisioning</td></tr>
+<tr><td>Grace periods</td><td>Reduce angry lockouts</td></tr>
+<tr><td>Test mode discipline</td><td>Avoid charging real taka in dev</td></tr>
+<tr><td>Audit trail</td><td>Support disputes professionally</td></tr>
 </tbody>
 </table>
 
-<p>Kubernetes before product-market fit is a vanity metric—lesson learned watching other student startups stall on infra.</p>
+<div class="callout warning"><strong>Warning:</strong> Never store raw card data. Use gateway tokens. PCI scope is not a student side quest.</div>
 
-<h2>Lesson 8: Legal and Trust Basics Matter in Bangladesh</h2>
+<h2>Lesson 4: Multi-Tenancy Can Start Simple</h2>
 
-<p>Not legal advice—but operational basics I handled:</p>
+<p>Early Bornosoft MVPs used shared database with <code>tenant_id</code> column and strict query filters—not schema-per-tenant complexity. Simplicity reduced bugs while customer count was low. We documented migration paths if enterprise clients arrived later.</p>
 
-<ul>
-<li>Clear Terms of Service and Privacy Policy pages</li>
-<li>Data export on request</li>
-<li>Honest uptime communication during outages</li>
-<li>Contracts simple enough that clients' accountants understand</li>
-</ul>
+<pre><code class="language-sql">SELECT * FROM invoices
+WHERE tenant_id = $1 AND id = $2;</code></pre>
 
-<p>Trust beats feature checklists for local SMB sales.</p>
+<p>Row-level security in Postgres became a upgrade milestone—not day one requirement.</p>
 
-<h2>Lesson 9: Marketing Is Engineering Adjacent</h2>
+<h2>Lesson 5: Onboarding Is Product</h2>
 
-<p>The best feature hidden behind SEO-less marketing dies quietly. I invested in:</p>
+<p>Signup-to-value time beat feature count. We improved:</p>
 
 <ul>
-<li>This portfolio and technical blog (SEO)</li>
-<li>Case studies with real metrics (even small)</li>
-<li>LinkedIn posts showing problem-solution, not logo announcements</li>
-<li>Free tools or calculators related to Bornosoft niches</li>
+<li>Email verification friction reduction.</li>
+<li>Sample data seed on first login.</li>
+<li>Three-step checklist UI ("add product," "create invoice," "share link").</li>
+<li>Loom-style short Bengali walkthrough videos.</li>
 </ul>
 
-<h2>Lesson 10: Know When to Kill a Product</h2>
+<p>Activation metrics moved more than any dark mode toggle.</p>
 
-<p>Not every Bornosoft experiment deserved eternal life. I sunsetting criteria:</p>
+<h2>Lesson 6: Tech Stack Pragmatism at Bornosoft</h2>
+
+<p>Our stack evolved: Next.js frontends, Node APIs, Go workers, PostgreSQL, Docker, GitHub Actions, AWS. Lesson: <strong>cohesion for team of one beats novelty</strong>. I resisted rewriting working Node services in Go without metrics—documented in my Golang journey articles.</p>
+
+<p>Student founders should optimize for:</p>
+
+<ul>
+<li>What you can debug alone at midnight.</li>
+<li>What DIU peers can contribute to if collaborating.</li>
+<li>What clients can afford to host.</li>
+</ul>
+
+<h2>Lesson 7: Observability Before Autoscaling</h2>
+
+<p>First production incident: disk full from unrotated logs—not traffic spike. We added:</p>
+
+<ul>
+<li>Structured JSON logs with request IDs.</li>
+<li>Error alerting to email/Slack.</li>
+<li>Uptime checks on critical paths.</li>
+<li>Weekly DB backup restore drill (yes, actually restore).</li>
+</ul>
+
+<p>SaaS reliability is trust. Bangladeshi SMB clients forgive slow features sooner than mysterious downtime.</p>
+
+<h2>Lesson 8: Pricing Is Positioning</h2>
+
+<p>Underpricing attracts high-support clients. We tested tiers:</p>
+
+<ul>
+<li><strong>Starter</strong> — Single location, core features.</li>
+<li><strong>Growth</strong> — Integrations + more seats.</li>
+<li><strong>Custom</strong> — On-prem or unusual workflows.</li>
+</ul>
+
+<p>Pricing in BDT with annual discount option improved cash flow vs monthly-only USD anxiety for local buyers.</p>
+
+<h2>Lesson 9: Legal and Trust Basics Matter Early</h2>
+
+<p>Terms of service, privacy policy, and data handling transparency are not only for Silicon Valley. University legal literacy clubs and online templates helped—but I still read every clause and adapted for Bangladesh context. Client contracts clarified support hours (no 3 AM expectation unless paid).</p>
+
+<h2>Lesson 10: Say No to Save the Product</h2>
+
+<p>Custom ERP requests, blockchain loyalty modules, "just like Amazon" marketplace features—founders hear fantasy scope daily. Polite no with alternative roadmap suggestion preserved Bornosoft focus.</p>
+
+<div class="callout note"><strong>Note:</strong> Every yes to a bad-fit client is a no to ten right-fit clients you never built for.</div>
+
+<h2>Lesson 11: Student Time Management Is Survival</h2>
+
+<p>DIU exams do not pause for sprint planning. Systems that saved me:</p>
+
+<ul>
+<li>Fixed Bornosoft deep work blocks on calendar.</li>
+<li>Automated deploys to reduce manual ops during finals.</li>
+<li>Client communication templates for busy weeks.</li>
+<li>Honest timeline buffers—under-promise, over-deliver.</li>
+</ul>
+
+<h2>Lesson 12: Documentation Is Sales Material</h2>
+
+<p>Good docs reduced support load and closed deals. Public docs, API examples, and architecture overviews signaled maturity to skeptical local businesses comparing us to spreadsheet workflows.</p>
+
+<h2>What I Would Do Differently Starting Again</h2>
 
 <ol>
-<li>No paying user in 90 days after real outreach</li>
-<li>Support cost exceeds revenue consistently</li>
-<li>Strategic misfit with core Bornosoft direction</li>
+<li>Launch smaller, charge earlier—even beta pricing.</li>
+<li>Instrument analytics day one (privacy-respecting).</li>
+<li>Hire/partner for design sooner—UI debt is real debt.</li>
+<li>Build community among early users for referrals.</li>
 </ol>
 
-<p>Killing a SaaS experiment freed weekends for projects with actual pull—emotionally hard, strategically essential.</p>
+<h2>Support Load and Documentation Debt</h2>
 
-<h2>Balancing SaaS With DIU Studies</h2>
+<p>Every new feature multiplied WhatsApp questions until we invested in in-app tooltips and short Loom videos in Bengali. Support is a hidden cost—budget time weekly. I tracked top five recurring questions and turned answers into FAQ pages, reducing repeat pings during DIU exam weeks.</p>
 
-<p>Software Engineering coursework does not pause for churn metrics. Systems that kept me sane:</p>
+<h2>Churn Analysis: Patterns I Noticed</h2>
+
+<p>Early Bornosoft churn was not random. Common themes:</p>
 
 <ul>
-<li>Fixed "Bornosoft hours" blocks—like part-time job schedule</li>
-<li>Automated deploys so releases are not manual marathon sessions</li>
-<li>Academic group projects chosen to reinforce SaaS skills (DB courses → multi-tenant schema)</li>
-<li>Sleep non-negotiable during exam weeks—bugs can wait 72 hours</li>
+<li>Never completed onboarding checklist.</li>
+<li>Expected desktop software behavior on mobile browsers.</li>
+<li>Needed features we explicitly deferred (payroll, inventory).</li>
+<li>Business closed or paused—not product failure.</li>
 </ul>
 
-<h2>What I Would Tell Freshman-Me</h2>
+<p>Interviewing churned users politely taught more than any analytics dashboard alone. Some returned months later when our roadmap matched their timing.</p>
 
-<ol>
-<li>Ship ugly, invoice early, iterate with real money signals</li>
-<li>Instrument before scaling marketing spend</li>
-<li>Write docs for future you—onboarding flows included</li>
-<li>Network with other Bangladesh student founders—loneliness kills momentum</li>
-<li>Perfect is the enemy of tuition-paid semesters</li>
-</ol>
+<h2>Building in Public Without Oversharing</h2>
+
+<p>I shared milestones on LinkedIn—first paying client, CI/CD wins, robotics demos—but avoided leaking client data or unreleased features. Building in public attracted DIU juniors asking internships questions and remote founders discussing integrations. Transparency builds trust; recklessness burns it.</p>
+
+<div class="callout tip"><strong>Tip:</strong> Celebrate shipping cadence publicly, not vanity metrics you cannot sustain.</div>
+
+<h2>When to Quit a Feature or Vertical</h2>
+
+<p>Not every experiment deserves eternity. We sunsetted a side module that consumed support time but generated negligible revenue. Sunk cost fallacy is real for student founders who emotionally attach to first ideas. Killing low-value scope freed weekends for core product stability—a win.</p>
 
 <h2>Conclusion</h2>
 
-<p>The <strong>lessons learned building SaaS products</strong> at Bornosoft are still being written—every client conversation rewrites assumptions. Code quality matters, but product judgment, billing hygiene, tenant safety, and honest scope win earlier than microservice diagrams.</p>
+<p>The biggest <strong>lessons learned building SaaS products</strong> at Bornosoft were human: listen, price honestly, ship small, operate reliably, protect focus. Technology choices matter—but multi-tenant column strategy does not matter if nobody activates after signup.</p>
 
-<p>If you are a DIU student dreaming of SaaS, start smaller than my first attempt: one painful problem, three design partners, manual billing, automated deploys, and weekly user calls. Everything else—including this article—is commentary until someone pays or passionately uses what you built.</p>
+<p>If you are a DIU student with a SaaS idea, pick one workflow, find three people who hate their current solution, and charge them before you build the perfect admin panel. Everything else is learnable along the way—including the hard lessons I just shared.</p>
 
-<p>Founder questions welcome at <a href="https://kazinayeem.site">kazinayeem.site</a>.</p>`,
+<p>Founder questions? <a href="https://kazinayeem.site">kazinayeem.site</a> or Bornosoft channels—happy to help fellow builders.</p>`,
   faqs: [
     {
-      question: "Can a university student realistically build a SaaS while studying?",
+      question: "Can students build SaaS while studying?",
       answer:
-        "Yes, with ruthless scope control and time blocks. Target tiny niches, manual processes early, and use coursework where it overlaps. Avoid competing with funded startups on feature breadth.",
+        "Yes, with strict scope and time boundaries. Start with tiny MVPs, manual processes, and clients who accept student-paced support. Automate and scale after validating willingness to pay.",
     },
     {
-      question: "What tech stack is best for student SaaS MVPs?",
+      question: "What tech stack is best for student SaaS?",
       answer:
-        "Next.js with PostgreSQL and a managed auth provider gets most MVPs live fastest. Add Go workers or Kubernetes only when metrics require it—not when blogs suggest it.",
+        "Use what you know deeply—often Next.js, Node, and Postgres for web SaaS. Prioritize shipping and maintainability over trendy stacks you cannot debug alone.",
     },
     {
-      question: "How do you find first SaaS customers in Bangladesh?",
+      question: "How do you get first SaaS customers in Bangladesh?",
       answer:
-        "Start with networks you trust—local businesses, DIU alumni, freelancer clients. Solve a specific operational pain, offer white-glove onboarding, and ask for referrals after success.",
+        "Solve local business pain points, offer hands-on onboarding in Bengali, price in BDT, and leverage personal networks, university communities, and proof-of-value pilots before scaling marketing spend.",
     },
     {
-      question: "When should a student founder incorporate formally?",
+      question: "When should a SaaS add second features?",
       answer:
-        "Depends on revenue and liability. Many start informal until recurring revenue justifies accountant and registration costs. Consult local business advisors when signing larger contracts.",
+        "After retention and activation metrics prove users complete the core job repeatedly. Expansion features follow a stable core—not precede it.",
     },
   ],
   relatedSlugs: [
     "why-i-chose-golang-backend-development",
-    "my-devops-roadmap-software-engineering-student",
+    "my-first-cicd-pipeline-github-actions",
     "creating-portfolio-ranks-google",
   ],
 });

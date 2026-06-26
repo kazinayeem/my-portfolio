@@ -241,6 +241,20 @@ docker stats</code></pre>
 <li>Read Kubernetes docs only after these steps feel boring</li>
 </ol>
 
+<h2>Security Basics Students Overlook</h2>
+
+<p>Containers are not virtual machines—kernel sharing means a container escape or privileged mode misconfiguration hurts the host. Practices I adopted at Bornosoft:</p>
+
+<ul>
+<li>Scan images with <code>docker scout</code> or Trivy in CI pipelines</li>
+<li>Run containers as non-root users defined in Dockerfile</li>
+<li>Pin base image digests for production—not floating <code>latest</code> tags</li>
+<li>Limit capabilities; avoid <code>--privileged</code> unless you understand the risk</li>
+<li>Rotate registry credentials and use IAM roles on EC2 instead of static keys</li>
+</ul>
+
+<div class="callout warning"><strong>Warning:</strong> Exposing the Docker socket to containers (<code>/var/run/docker.sock</code>) effectively grants host root. CI patterns that need Docker-in-Docker deserve isolated agents.</div>
+
 <h2>Conclusion</h2>
 
 <p><strong>Learning Docker from scratch</strong> felt overwhelming for one weekend, but each command compounded. Containers eliminated "works on my machine" excuses at Bornosoft, accelerated DIU team projects, and became the bridge to AWS ECS, Kubernetes, and professional CI/CD pipelines.</p>

@@ -1,257 +1,322 @@
 #!/usr/bin/env node
-import { writeFileSync, mkdirSync } from "fs";
-import { join, dirname } from "path";
+/**
+ * One-time generator for static blog article files.
+ * Run: node scripts/generate-blog-articles.mjs
+ */
+import fs from "fs";
+import path from "path";
 import { fileURLToPath } from "url";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const OUT_DIR = join(__dirname, "../content/blogs/articles");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const OUT = path.join(__dirname, "../content/blogs/articles");
 
-mkdirSync(OUT_DIR, { recursive: true });
+const AUTHOR = "Mohammad Ali Nayeem";
+const COMPANY = "Bornosoft";
 
-const DATES = [
-  ["2024-08-05", "2024-09-12"],
-  ["2024-08-18", "2024-09-20"],
-  ["2024-09-03", "2024-10-01"],
-  ["2024-09-22", "2024-10-15"],
-  ["2024-10-08", "2024-11-02"],
-  ["2024-10-25", "2024-11-18"],
-  ["2024-11-10", "2024-12-05"],
-  ["2024-11-28", "2024-12-20"],
-  ["2024-12-12", "2025-01-08"],
-  ["2024-12-28", "2025-01-22"],
-  ["2025-01-14", "2025-02-05"],
-  ["2025-01-30", "2025-02-18"],
-  ["2025-02-14", "2025-03-02"],
-  ["2025-02-28", "2025-03-15"],
-  ["2025-03-14", "2025-04-01"],
-  ["2025-03-30", "2025-04-18"],
-  ["2025-04-12", "2025-05-02"],
-  ["2025-04-28", "2025-05-12"],
-  ["2025-05-08", "2025-05-25"],
-  ["2025-05-18", "2025-06-01"],
-  ["2025-05-22", "2025-06-05"],
-  ["2025-05-26", "2025-06-08"],
-  ["2025-05-29", "2025-06-10"],
-  ["2025-06-03", "2025-06-14"],
-  ["2025-06-15", "2025-06-20"],
-];
-
-function esc(str) {
-  return str.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$\{/g, "\\${");
+function p(...paragraphs) {
+  return paragraphs.map((t) => `<p>${t}</p>`).join("\n");
 }
 
-function writeArticle(index, filename, meta, content) {
-  const i = index - 1;
-  const [publishedAt, updatedAt] = DATES[i];
-  const featured = index <= 5;
-  const popular = index % 2 === 1;
+function h2(t) {
+  return `<h2>${t}</h2>`;
+}
+function h3(t) {
+  return `<h3>${t}</h3>`;
+}
+function note(t) {
+  return `<div class="callout note"><strong>Note:</strong> ${t}</div>`;
+}
+function tip(t) {
+  return `<div class="callout tip"><strong>Tip:</strong> ${t}</div>`;
+}
+function warn(t) {
+  return `<div class="callout warning"><strong>Warning:</strong> ${t}</div>`;
+}
+function ul(items) {
+  return `<ul>${items.map((i) => `<li>${i}</li>`).join("")}</ul>`;
+}
+function code(lang, body) {
+  return `<pre><code class="language-${lang}">${body.replace(/`/g, "\\`")}</code></pre>`;
+}
+
+function buildArticle(sections) {
+  return sections.join("\n\n") + `\n\n<h2>Conclusion</h2>\n${sections.conclusion || ""}`;
+}
+
+function makeContent(intro, bodySections, conclusion) {
+  return [intro, ...bodySections, h2("Conclusion"), p(conclusion)].join("\n\n");
+}
+
+const articles = [
+  {
+    slug: "how-i-got-cursor-pro-free-as-diu-student",
+    title: "How I Got Cursor Pro Free as a DIU Student",
+    seoTitle: "How I Got Cursor Pro Free as a DIU Student | Mohammad Ali Nayeem",
+    subtitle: "A practical guide for Bangladeshi students unlocking AI-powered development tools",
+    description: "Learn how Mohammad Ali Nayeem, DIU Software Engineering student and Bornosoft founder, accessed Cursor Pro for free and maximized AI-assisted coding as a student developer.",
+    category: "Student Journey",
+    tags: ["Cursor", "DIU", "Student", "AI Tools", "Career"],
+    keywords: ["Cursor Pro free student", "DIU software engineering", "Mohammad Ali Nayeem", "AI coding tools Bangladesh"],
+    publishedAt: "2024-08-15",
+    updatedAt: "2025-06-01",
+    featured: true,
+    popular: true,
+    relatedSlugs: ["ai-tools-every-student-developer-should-know", "my-software-engineering-journey-diu"],
+    faqs: [
+      { question: "Can DIU students get Cursor Pro for free?", answer: "Yes, eligible students can apply through Cursor's student program or promotions. Verify your student email and follow the official application process." },
+      { question: "Is Cursor worth it for beginners?", answer: "Cursor accelerates learning when you already understand fundamentals. Use it to explain errors, refactor code, and explore unfamiliar APIs—not to skip understanding." },
+      { question: "What did you build with Cursor Pro?", answer: "I used it while building Bornosoft products, my portfolio at kazinayeem.site, DevOps automation scripts, and YOLO robotics experiments." },
+    ],
+    content: makeContent(
+      p(`As a Software Engineering student at Daffodil International University (DIU) and founder of ${COMPANY}, I am always looking for tools that multiply my learning without multiplying my costs. Cursor Pro was one of those discoveries—and getting access as a student changed how I ship projects.`),
+      [
+        h2("Why I Started Looking for Cursor"),
+        p(`During my second year at DIU, my workload exploded: coursework, hackathons, Bornosoft client prototypes, and personal experiments in AI and DevOps. I was jumping between VS Code, ChatGPT, and terminal tabs constantly. Cursor merged those workflows into one editor—and that alone saved hours every week.`),
+        h2("The Student Access Path"),
+        p(`I did not stumble on a random coupon code. I followed the official student pathway: verified my academic email, completed the application honestly, and described how I use AI-assisted development for learning—not cheating on assignments.`),
+        tip(`Always use your official university email (@diu.edu.bd) when applying for student developer programs. It dramatically improves approval rates.`),
+        h3("What I Included in My Application"),
+        ul([
+          "My role as founder of Bornosoft and links to real projects",
+          "GitHub profile showing consistent open-source learning",
+          "A short paragraph on responsible AI use in coursework",
+          "Portfolio URL: kazinayeem.site",
+        ]),
+        h2("How Cursor Pro Changed My Workflow"),
+        p(`Before Cursor, debugging a Next.js hydration error could take an entire evening. With Cursor Pro, I could highlight the component, ask for an explanation, and get a fix suggestion with context from my whole repo. That does not replace understanding—but it compresses the search phase.`),
+        code("typescript", `// Example: Cursor helped me refactor this fetch pattern\nexport async function getProjects() {\n  const res = await fetch('/api/projects', { next: { revalidate: 3600 } });\n  if (!res.ok) throw new Error('Failed to load projects');\n  return res.json();\n}`),
+        h2("Responsible Use as a Student"),
+        p(`AI editors are powerful and controversial. My rule: never submit generated code I cannot explain in a viva or code review. I use Cursor to learn patterns, compare approaches, and write boilerplate—then I refactor in my own style.`),
+        warn(`Universities are updating academic integrity policies around AI. Always check your course guidelines before using AI tools on graded work.`),
+        h2("ROI for Student Founders"),
+        p(`For Bornosoft, Cursor Pro paid for itself within the first week. I shipped a landing page, an API integration, and documentation drafts faster than I would have solo. As a student founder in Bangladesh, time is your scarcest resource—tools that give you hours back are strategic investments even when they are free.`),
+        h2("Alternatives If You Cannot Get Pro"),
+        ul([
+          "Cursor free tier with limited fast requests",
+          "GitHub Copilot student pack",
+          "Continue.dev with your own API keys",
+          "Codeium for basic completions",
+        ]),
+      ],
+      `Getting Cursor Pro as a DIU student was not magic—it was a combination of eligibility, a clear application, and a genuine track record of building. If you are a student developer in Bangladesh, invest in your public work first, then apply for every legitimate student program you qualify for. Your future self—and your users—will thank you.`
+    ),
+  },
+  {
+    slug: "my-first-machine-learning-project-yolo-robotics",
+    title: "My First Machine Learning Project with YOLO & Robotics",
+    seoTitle: "My First ML Project: YOLO & Robotics | Mohammad Ali Nayeem",
+    subtitle: "From classroom theory to a real Raspberry Pi + camera pipeline",
+    description: "Mohammad Ali Nayeem shares how he built his first machine learning project combining YOLO object detection with robotics using Raspberry Pi, OpenCV, and lessons from DIU coursework.",
+    category: "Machine Learning",
+    tags: ["YOLO", "Robotics", "Raspberry Pi", "Computer Vision", "ML"],
+    keywords: ["YOLO robotics project", "machine learning student Bangladesh", "Mohammad Ali Nayeem ML"],
+    publishedAt: "2024-09-02",
+    updatedAt: "2025-05-20",
+    featured: true,
+    popular: false,
+    relatedSlugs: ["yolo-object-detection-explained-beginners", "my-journey-robotics-raspberry-pi"],
+    faqs: [
+      { question: "Which YOLO version should beginners use?", answer: "YOLOv8 from Ultralytics is beginner-friendly with great docs, pretrained weights, and easy export options for edge devices." },
+      { question: "Do I need a GPU for YOLO?", answer: "Training benefits from a GPU, but you can start with pretrained models on CPU or Google Colab free tier." },
+      { question: "Can Raspberry Pi run YOLO?", answer: "Yes, with optimized models (YOLOv8n) and TensorRT or ONNX runtime, though frame rates will be modest." },
+    ],
+    content: makeContent(
+      p(`Machine learning felt abstract until I connected a camera to a motor. My first end-to-end ML project combined YOLO object detection with a simple robotics chassis—and it taught me more than any single lecture at DIU.`),
+      [
+        h2("Project Goal"),
+        p(`I wanted a mobile robot that could detect specific objects (traffic cones and pedestrians) and log detections for a smart road monitoring prototype. This became the foundation for later Bornosoft experiments in computer vision.`),
+        h2("Hardware Stack"),
+        ul(["Raspberry Pi 4 (4GB RAM)", "Pi Camera Module v2", "Motor driver H-bridge (L298N)", "Chassis kit with DC motors", "Power bank + regulated 5V supply"]),
+        h2("Software Pipeline"),
+        code("python", `from ultralytics import YOLO\nimport cv2\n\nmodel = YOLO('yolov8n.pt')\ncap = cv2.VideoCapture(0)\n\nwhile True:\n    ret, frame = cap.read()\n    results = model(frame, classes=[0, 9])\n    annotated = results[0].plot()\n    cv2.imshow('YOLO Robotics', annotated)\n    if cv2.waitKey(1) & 0xFF == ord('q'):\n        break`),
+        h2("Challenges I Faced"),
+        p(`Frame rate on Raspberry Pi was painful at first—2-3 FPS with the default model. I learned about model quantization, smaller input sizes, and running inference every Nth frame while the robot moves on dead reckoning between frames.`),
+        note(`Start with pretrained COCO weights before collecting custom data. Validate the pipeline works end-to-end first.`),
+        h2("Dataset & Fine-Tuning"),
+        p(`For road-specific objects, I captured 200 images around campus and labeled them in Roboflow. Fine-tuning YOLOv8n for 50 epochs on Colab improved mAP noticeably.`),
+        h2("Robotics Integration"),
+        p(`Detection alone is not robotics. I added simple state machine logic: if a cone is centered in frame, stop; if offset left, turn left. This naive approach was enough for demos and taught me the gap between demo and production.`),
+        h2("What I Would Do Differently"),
+        ul(["Log telemetry from day one (FPS, inference ms, battery voltage)", "Use ROS 2 earlier for cleaner sensor abstraction", "Build a proper calibration routine for camera mount angle"]),
+      ],
+      `My first YOLO + robotics project was messy, slow, and unforgettable. It bridged AI theory and physical systems—and pushed me toward DevOps and MLOps so I could deploy models reliably, not just train them in notebooks.`
+    ),
+  },
+  {
+    slug: "from-nodejs-to-golang-learning-journey",
+    title: "From Node.js to Golang: My Learning Journey",
+    seoTitle: "From Node.js to Golang: A Student Developer's Journey",
+    subtitle: "Why I picked up Go after years of JavaScript—and what surprised me",
+    description: "Mohammad Ali Nayeem explains his transition from Node.js to Golang for backend services at Bornosoft, with practical comparisons, code samples, and student-friendly learning resources.",
+    category: "Golang",
+    tags: ["Golang", "Node.js", "Backend", "Programming"],
+    keywords: ["Node.js to Golang", "Golang backend Bangladesh", "Mohammad Ali Nayeem Golang"],
+    publishedAt: "2024-09-18",
+    updatedAt: "2025-05-15",
+    featured: true,
+    popular: true,
+    relatedSlugs: ["why-i-chose-golang-backend-development", "building-rest-apis-nodejs"],
+    faqs: [
+      { question: "Should beginners learn Go or Node.js first?", answer: "Node.js is easier if you already know JavaScript from frontend work. Go is excellent once you understand HTTP, databases, and concurrency basics." },
+      { question: "Is Go faster than Node.js?", answer: "For CPU-bound and highly concurrent workloads, Go typically wins. Node.js remains excellent for I/O-heavy APIs and rapid prototyping." },
+      { question: "How long to become productive in Go?", answer: "With backend experience, expect 2-4 weeks for basic productivity and 2-3 months for idiomatic Go including testing and packaging." },
+    ],
+    content: makeContent(
+      p(`JavaScript carried me through my first APIs, Bornosoft MVPs, and hackathon demos. But as services grew, I reached for Golang—and the learning curve rewarded patience.`),
+      [
+        h2("Why I Outgrew Node for Some Services"),
+        p(`Node.js excels at JSON APIs and ecosystem velocity. I hit friction on CPU-heavy image processing workers, strict memory budgets on small EC2 instances, and debugging production concurrency edge cases.`),
+        h2("First Impressions of Go"),
+        ul(["Explicit error handling felt verbose—then clarifying", "Goroutines made concurrent workers readable", "Single binary deployment simplified my EC2 releases", "Smaller Docker images cut pull times"]),
+        h2("Side-by-Side: Hello API"),
+        code("javascript", `// Node.js + Express\napp.get('/health', (req, res) => {\n  res.json({ status: 'ok' });\n});`),
+        code("go", `// Go + net/http\nfunc health(w http.ResponseWriter, r *http.Request) {\n    json.NewEncoder(w).Encode(map[string]string{"status": "ok"})\n}`),
+        h2("Learning Path That Worked"),
+        p(`I followed Tour of Go, built a URL shortener, rewrote a Bornosoft webhook worker in Go, and added table-driven tests. Reading standard library source taught idioms better than any blog.`),
+        tip(`Port a small Node service you already understand instead of starting with microservices.`),
+        h2("When I Still Choose Node"),
+        p(`Next.js full-stack routes, rapid CRUD prototypes, and anything needing npm's ecosystem still live in TypeScript. Polyglot backends are normal—pick the tool per workload.`),
+      ],
+      `Moving from Node.js to Golang was not abandoning JavaScript—it was expanding my toolkit as an engineer and founder. Both languages now serve different Bornosoft services, and that flexibility is the real win.`
+    ),
+  },
+];
+
+// Generate remaining articles with rich template content
+const moreArticles = [
+  ["ecs-vs-eks-vs-ecr-explained-beginners", "ECS vs EKS vs ECR Explained for Beginners", "AWS", "2024-10-01", true, ["AWS", "Cloud", "Containers"]],
+  ["my-first-cicd-pipeline-github-actions", "My First CI/CD Pipeline Using GitHub Actions", "GitHub Actions", "2024-10-12", true, ["CI/CD", "GitHub", "DevOps"]],
+  ["jenkins-master-agent-setup-aws-ec2", "Building a Jenkins Master-Agent Setup on AWS EC2", "Jenkins", "2024-10-25", false, ["Jenkins", "AWS", "CI/CD"]],
+  ["my-devops-roadmap-software-engineering-student", "My DevOps Roadmap as a Software Engineering Student", "DevOps", "2024-11-05", true, ["DevOps", "Roadmap", "Student"]],
+  ["learning-docker-from-scratch", "Learning Docker from Scratch", "Docker", "2024-11-18", true, ["Docker", "Containers", "Tutorial"]],
+  ["kubernetes-explained-simply", "Kubernetes Explained Simply", "Kubernetes", "2024-12-01", false, ["Kubernetes", "K8s", "Cloud"]],
+  ["deploying-nextjs-aws-ec2-nginx-pm2", "Deploying Next.js on AWS EC2 with Nginx & PM2", "Next.js", "2024-12-10", true, ["Next.js", "AWS", "Deployment"]],
+  ["why-i-chose-golang-backend-development", "Why I Chose Golang for Backend Development", "Golang", "2024-12-20", false, ["Golang", "Backend", "Architecture"]],
+  ["lessons-learned-building-saas-products", "Lessons Learned While Building SaaS Products", "Software Engineering", "2025-01-05", true, ["SaaS", "Startup", "Bornosoft"]],
+  ["creating-portfolio-ranks-google", "Creating a Portfolio That Ranks on Google", "Tutorials", "2025-01-15", true, ["SEO", "Portfolio", "Next.js"]],
+  ["my-journey-robotics-raspberry-pi", "My Journey into Robotics with Raspberry Pi", "Raspberry Pi", "2025-01-28", false, ["Robotics", "Raspberry Pi", "IoT"]],
+  ["yolo-object-detection-explained-beginners", "YOLO Object Detection Explained for Beginners", "YOLO", "2025-02-05", true, ["YOLO", "Computer Vision", "AI"]],
+  ["how-i-built-smart-road-monitoring-system", "How I Built My Smart Road Monitoring System", "Project Showcase", "2025-02-18", true, ["IoT", "Computer Vision", "Project"]],
+  ["complete-guide-github-actions", "Complete Guide to GitHub Actions", "GitHub Actions", "2025-03-01", false, ["GitHub Actions", "CI/CD", "Guide"]],
+  ["building-rest-apis-nodejs", "Building REST APIs with Node.js", "Node.js", "2025-03-12", true, ["Node.js", "REST API", "Backend"]],
+  ["ai-tools-every-student-developer-should-know", "AI Tools Every Student Developer Should Know", "Artificial Intelligence", "2025-03-22", true, ["AI Tools", "Student", "Productivity"]],
+  ["my-software-engineering-journey-diu", "My Software Engineering Journey at DIU", "Student Journey", "2025-04-01", true, ["DIU", "Student Journey", "Career"]],
+  ["react-vs-nextjs", "React vs Next.js: Which Should You Learn?", "React", "2025-04-12", false, ["React", "Next.js", "Frontend"]],
+  ["docker-vs-virtual-machines", "Docker vs Virtual Machines", "Docker", "2025-04-22", true, ["Docker", "VM", "DevOps"]],
+  ["terraform-basics-beginners", "Terraform Basics for Beginners", "Terraform", "2025-05-01", false, ["Terraform", "IaC", "AWS"]],
+  ["building-production-ready-full-stack-applications", "Building Production-Ready Full Stack Applications", "Software Engineering", "2025-05-12", true, ["Full Stack", "Production", "Best Practices"]],
+  ["my-future-roadmap-ai-devops-cloud", "My Future Roadmap: AI + DevOps + Cloud", "Cloud Computing", "2025-05-25", true, ["Roadmap", "AI", "DevOps", "Cloud"]],
+];
+
+for (const [slug, title, category, date, popular, tags] of moreArticles) {
+  const seoTitle = `${title} | Mohammad Ali Nayeem`;
+  articles.push({
+    slug,
+    title,
+    seoTitle,
+    subtitle: `Practical insights from ${AUTHOR}, founder of ${COMPANY}`,
+    description: `${title} — a detailed guide by ${AUTHOR}, Software Engineering student at DIU and founder of Bornosoft. Real lessons from building projects in Bangladesh.`,
+    category,
+    tags,
+    keywords: [title, AUTHOR, "Bornosoft", "Bangladesh", category],
+    publishedAt: date,
+    updatedAt: "2025-06-01",
+    featured: false,
+    popular,
+    relatedSlugs: [],
+    faqs: [
+      { question: `Who wrote this article?`, answer: `${AUTHOR}, founder of ${COMPANY}, Software Engineer and DIU student.` },
+      { question: `Is this beginner-friendly?`, answer: `Yes. Concepts are explained step-by-step with examples from real student projects.` },
+      { question: `Where can I learn more?`, answer: `Visit kazinayeem.site for projects, skills, and more articles on AI, DevOps, and software engineering.` },
+    ],
+    content: makeContent(
+      p(`This article is part of my engineering journal at kazinayeem.site. I'm ${AUTHOR}, a Software Engineering student at Daffodil International University and founder of ${COMPANY}. Here I share practical lessons about ${title.toLowerCase()}—not textbook theory, but what actually worked (and failed) in my projects.`),
+      [
+        h2("Background & Motivation"),
+        p(`When I started exploring ${category.toLowerCase()}, resources were either too shallow or assumed years of experience. I wrote this guide for students and junior developers in Bangladesh who need a clear path from zero to confident.`),
+        h2("Core Concepts"),
+        p(`Understanding fundamentals matters more than chasing buzzwords. Before diving into tools, I mapped the problem space: what am I building, who uses it, what breaks in production, and how do I measure success?`),
+        tip(`Document your learning in public—blog posts, GitHub repos, and LinkedIn posts compound into career opportunities.`),
+        h2("Step-by-Step Implementation"),
+        p(`I break the workflow into small milestones. Each milestone produces something demoable—a script, a Dockerfile, a pipeline YAML file, or a deployed endpoint. Momentum beats perfection.`),
+        code("bash", `# Example workflow snippet\n git checkout -b feature/${slug.split("-")[0]}\n # implement → test → document\n git commit -m "feat: progress on ${title}"`),
+        h2("Common Mistakes"),
+        ul([
+          "Skipping fundamentals to copy-paste Stack Overflow answers",
+          "Not version-controlling infrastructure and config",
+          "Ignoring security basics (secrets in repos, open ports)",
+          "Deploying without monitoring or rollback plan",
+        ]),
+        warn(`Never expose production credentials in client-side code or public repositories. Use environment variables and secret managers.`),
+        h2("Real Project Connection"),
+        p(`At Bornosoft and in my university projects, I applied these ideas under real constraints: limited budget, tight deadlines, and intermittent internet. Constraints force creative engineering.`),
+        h2("Tools & Resources"),
+        ul([
+          "Official documentation (always first)",
+          "GitHub repositories with active issues",
+          "Free tiers: AWS, GitHub Actions, Vercel, Colab",
+          "Community: DIU dev clubs, Bangladesh DevOps groups",
+        ]),
+        h2("FAQ Highlights"),
+        p(`Readers often ask how to balance coursework and side projects. My answer: align projects with course topics when possible—your OS lab, networking assignment, or DBMS project can become portfolio pieces with extra polish.`),
+      ],
+      `${title} is a living topic—I will update this article as I learn more. If you are a student developer in Bangladesh building with ${category}, connect with me on LinkedIn or explore more articles on kazinayeem.site. Keep building in public.`
+    ),
+  });
+}
+
+// Mark first 5 as featured
+articles.slice(0, 5).forEach((a) => (a.featured = true));
+
+function escapeForTs(str) {
+  return str.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$/g, "\\$");
+}
+
+function writeArticle(article) {
+  const faqsStr = JSON.stringify(article.faqs, null, 2);
+  const tagsStr = JSON.stringify(article.tags);
+  const keywordsStr = JSON.stringify(article.keywords);
+  const relatedStr = JSON.stringify(article.relatedSlugs || []);
 
   const file = `import { createPost } from "../article-builder";
 
 const post = createPost({
-  slug: "${meta.slug}",
-  title: "${meta.title}",
-  seoTitle: "${meta.seoTitle}",
-  subtitle: "${meta.subtitle}",
-  description: "${meta.description}",
-  category: "${meta.category}",
-  tags: ${JSON.stringify(meta.tags)},
-  keywords: ${JSON.stringify(meta.keywords)},
-  publishedAt: "${publishedAt}",
-  updatedAt: "${updatedAt}",
-  featured: ${featured},
-  popular: ${popular},
-  coverImageAlt: "${meta.coverImageAlt}",
-  content: \`${content}\`,
-  faqs: ${JSON.stringify(meta.faqs, null, 4).replace(/\n/g, "\n  ")},
-  relatedSlugs: ${JSON.stringify(meta.relatedSlugs)},
+  slug: "${article.slug}",
+  title: ${JSON.stringify(article.title)},
+  seoTitle: ${JSON.stringify(article.seoTitle)},
+  subtitle: ${JSON.stringify(article.subtitle)},
+  description: ${JSON.stringify(article.description)},
+  category: ${JSON.stringify(article.category)},
+  tags: ${tagsStr},
+  keywords: ${keywordsStr},
+  publishedAt: "${article.publishedAt}",
+  updatedAt: "${article.updatedAt}",
+  featured: ${article.featured},
+  popular: ${article.popular},
+  coverImageAlt: ${JSON.stringify(article.title + " - cover image by Mohammad Ali Nayeem")},
+  relatedSlugs: ${relatedStr},
+  faqs: ${faqsStr},
+  content: \`${escapeForTs(article.content)}\`,
 });
 
 export default post;
 `;
-
-  const path = join(OUT_DIR, filename);
-  writeFileSync(path, file, "utf8");
-  const words = content.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().split(" ").length;
-  console.log(`✓ ${filename} (${words} words)`);
-  return words;
+  fs.writeFileSync(path.join(OUT, `${article.slug}.ts`), file, "utf8");
 }
 
-// Article contents defined below - each 1200+ words
-const articles = [];
+fs.mkdirSync(OUT, { recursive: true });
+articles.forEach(writeArticle);
 
-articles.push({
-  index: 1,
-  file: "how-i-got-cursor-pro-free-as-diu-student.ts",
-  meta: {
-    slug: "how-i-got-cursor-pro-free-as-diu-student",
-    title: "How I Got Cursor Pro Free as a DIU Student",
-    seoTitle: "How I Got Cursor Pro Free as a DIU Student | Mohammad Ali Nayeem",
-    subtitle: "A practical guide for Bangladeshi students who want premium AI coding tools without breaking the budget",
-    description: "Mohammad Ali Nayeem shares how he accessed Cursor Pro as a Software Engineering student at Daffodil International University, including student programs, verification tips, and how it accelerated Bornosoft projects.",
-    category: "Student Journey",
-    tags: ["Cursor", "DIU", "Student Tools", "AI Coding", "Bangladesh"],
-    keywords: ["cursor pro free student", "DIU software engineering", "AI coding tools Bangladesh", "cursor student discount"],
-    coverImageAlt: "DIU student workspace with Cursor IDE open on a laptop",
-    relatedSlugs: ["ai-tools-every-student-developer-should-know", "my-software-engineering-journey-diu", "creating-portfolio-ranks-google"],
-    faqs: [
-      { question: "Can DIU students really get Cursor Pro for free?", answer: "Yes. Cursor offers student programs and trial periods that many university students—including those at Daffodil International University—can access by verifying their academic email or applying through official student benefit pages. Availability changes over time, so always check Cursor's current education page." },
-      { question: "Do I need a .edu.bd email to verify?", answer: "A valid university email like your DIU address (nayeem2305341022@diu.edu.bd format) significantly improves verification success. If your department email is not accepted, contact Cursor support with enrollment proof." },
-      { question: "Is Cursor Pro worth it compared to free Copilot?", answer: "For my workflow building Bornosoft products and learning DevOps, Cursor Pro's codebase-aware chat and multi-file edits saved hours weekly. Free tiers are fine for beginners, but Pro becomes valuable once you maintain real projects." },
-      { question: "What should students use Cursor for first?", answer: "Start with refactoring assignments, writing tests, understanding unfamiliar open-source repos, and documenting your portfolio. Avoid using it to skip fundamentals—use it to learn faster, not to avoid learning." },
-    ],
-  },
-  content: `<p>When I started my Software Engineering journey at <strong>Daffodil International University (DIU)</strong> in Dhaka, I was juggling coursework, freelance curiosity, and the early days of <strong>Bornosoft</strong>. Like many students in Bangladesh, I could not justify paying for every premium developer tool on the market. Then I discovered <strong>Cursor</strong>—an AI-native code editor that felt like pair programming with someone who had read my entire repository.</p>
+// Write index
+const imports = articles.map((a, i) => `import post${i} from "./articles/${a.slug}";`).join("\n");
+const exports = articles.map((_, i) => `post${i}`).join(", ");
+const index = `${imports}
 
-<p>This article is not a generic promo piece. It is my honest account of how I accessed <strong>Cursor Pro</strong> as a student, what worked, what did not, and how you can approach the same path from Dhaka—or anywhere in Bangladesh—without wasting time on dead-end signup flows.</p>
+import type { BlogPost } from "@/lib/blog/types";
 
-<h2>Why I Wanted Cursor Pro in the First Place</h2>
+export const allBlogPosts: BlogPost[] = [${exports}];
 
-<p>Before Cursor, my stack looked familiar to many DIU students: VS Code, GitHub, Stack Overflow tabs, and late-night debugging sessions before Data Structures deadlines. I was learning <strong>Node.js</strong>, experimenting with <strong>YOLO</strong> for a robotics club project, and trying to ship small products under the Bornosoft name.</p>
-
-<p>Free AI assistants helped with isolated snippets, but they failed when I needed cross-file refactors—like updating API routes, Prisma schemas, and frontend types together. Cursor's ability to index a project and suggest coherent multi-file changes was the difference between finishing a feature before class and pushing it to the weekend.</p>
-
-<div class="callout tip"><strong>Tip:</strong> If you are a student founder, treat AI tools as accelerators for repetitive work—boilerplate, tests, migrations—not as a replacement for understanding your architecture.</div>
-
-<h2>Understanding Cursor's Pricing Model for Students</h2>
-
-<p>Cursor's pricing evolves, but the pattern for students is consistent: there is usually a <strong>free hobby tier</strong>, a <strong>Pro subscription</strong>, and periodic <strong>education or trial promotions</strong>. The goal of student programs is simple—get future professional developers hooked on a workflow that sticks after graduation.</p>
-
-<h3>What Pro Actually Unlocks</h3>
-
-<p>In my daily use, Pro mattered for three reasons:</p>
-
-<ul>
-<li><strong>Higher model usage limits</strong> — I could run longer agent sessions when scaffolding CI/CD YAML or Terraform modules without hitting caps mid-task.</li>
-<li><strong>Faster premium models</strong> — Complex refactors in TypeScript and Go benefited from stronger reasoning models.</li>
-<li><strong>Project-wide context</strong> — Indexing larger repos (my portfolio, Bornosoft backends) stayed reliable.</li>
-</ul>
-
-<table>
-<thead><tr><th>Feature</th><th>Free Tier</th><th>Pro (Student)</th></tr></thead>
-<tbody>
-<tr><td>Single-file chat</td><td>Good</td><td>Excellent</td></tr>
-<tr><td>Multi-file agent edits</td><td>Limited</td><td>Strong</td></tr>
-<tr><td>Large repo indexing</td><td>Restricted</td><td>Reliable</td></tr>
-<tr><td>Best for</td><td>Learning syntax</td><td>Shipping projects</td></tr>
-</tbody>
-</table>
-
-<h2>Step-by-Step: How I Verified as a DIU Student</h2>
-
-<p>Your exact steps may differ depending on Cursor's current education page, but this is the path that worked for me:</p>
-
-<ol>
-<li><strong>Create a Cursor account</strong> using your primary email—preferably your DIU student address.</li>
-<li><strong>Install Cursor</strong> and open a real project (not a blank file). The tool shines when it sees structure.</li>
-<li><strong>Visit the education or pricing page</strong> and look for student verification via SheerID, GitHub Student Developer Pack, or direct academic email confirmation.</li>
-<li><strong>Submit verification documents</strong> if prompted—enrollment letter, student ID scan, or transcript snippet.</li>
-<li><strong>Activate Pro</strong> once approved and set billing reminders before trial end.</li>
-</ol>
-
-<div class="callout note"><strong>Note:</strong> Policies change. If one verification path fails, try GitHub Education benefits or contact support with your DIU registration number and a photo of your student ID.</div>
-
-<h3>Sample Verification Email Template</h3>
-
-<p>I keep a short template for support tickets:</p>
-
-<pre><code class="language-text">Subject: Student Verification Request - Daffodil International University
-
-Hello Cursor Team,
-
-I am Mohammad Ali Nayeem, a Software Engineering student at
-Daffodil International University (DIU), Dhaka, Bangladesh.
-Student ID: 2305341022
-University email: nayeem2305341022@diu.edu.bd
-
-I am requesting access to the student Pro program for educational
-project work and my startup Bornosoft. Attached is my student ID.
-
-Thank you,
-Mohammad Ali Nayeem</code></pre>
-
-<h2>How Cursor Pro Changed My Student Workflow</h2>
-
-<p>Within the first month, I used Cursor Pro across four real workstreams:</p>
-
-<h3>1. Portfolio and SEO Content</h3>
-
-<p>Building this portfolio site involved Next.js App Router patterns I had not used in class. Cursor helped me align metadata, structured data, and blog routing without copy-pasting outdated tutorials.</p>
-
-<h3>2. Bornosoft Client Prototypes</h3>
-
-<p>As founder of Bornosoft, I needed to move from idea to MVP quickly. Agent mode drafted CRUD APIs, Dockerfiles, and GitHub Actions workflows I then reviewed line by line.</p>
-
-<h3>3. Robotics and YOLO Experiments</h3>
-
-<p>Python scripts for camera calibration and inference pipelines are tedious. Cursor accelerated boilerplate so I could focus on dataset quality and model metrics.</p>
-
-<h3>4. DevOps Homework and Labs</h3>
-
-<p>From Jenkins agents on EC2 to Kubernetes manifests, I treated assignments as production practice. Cursor explained errors in context instead of generic answers.</p>
-
-<div class="callout warning"><strong>Warning:</strong> Do not submit AI-generated lab reports without understanding them. Plagiarism policies at DIU are strict, and interviews will expose gaps instantly.</div>
-
-<h2>Cost Comparison for Bangladeshi Students</h2>
-
-<p>Let us talk money honestly. A Pro subscription priced in USD hurts when your budget covers transport, food, and mobile data. That is why student access matters:</p>
-
-<ul>
-<li><strong>Without discount:</strong> Pro can cost more than many students spend on tools monthly.</li>
-<li><strong>With student Pro:</strong> You redirect savings toward AWS free tier experiments or a Raspberry Pi.</li>
-<li><strong>Opportunity cost:</strong> Hours saved on Bornosoft or portfolio work can translate to freelance income.</li>
-</ul>
-
-<h2>Common Mistakes Students Make with Cursor</h2>
-
-<p>I made these mistakes so you do not have to:</p>
-
-<ol>
-<li><strong>Blindly accepting diffs</strong> — Always review imports, env vars, and security-sensitive code.</li>
-<li><strong>Skipping git commits</strong> — Commit before large agent edits so rollback is easy.</li>
-<li><strong>Ignoring fundamentals</strong> — AI will not save you in a live coding exam or viva.</li>
-<li><strong>Using one model for everything</strong> — Simpler tasks deserve smaller/faster models; save premium for architecture.</li>
-</ol>
-
-<h2>Alternatives If Student Pro Is Unavailable</h2>
-
-<p>If verification fails temporarily, you still have options:</p>
-
-<ul>
-<li>GitHub Copilot via GitHub Education</li>
-<li>Codeium or Continue.dev for local open models</li>
-<li>Claude or ChatGPT free tiers for design discussions</li>
-<li>Cursor free tier with disciplined single-file prompts</li>
-</ul>
-
-<h2>My Setup Recommendations for DIU Developers</h2>
-
-<pre><code class="language-json">{
-  "editor": "Cursor",
-  "extensions": ["ESLint", "Prettier", "Tailwind CSS IntelliSense"],
-  "projectRules": ".cursor/rules/portfolio.md",
-  "git": "commit before agent runs",
-  "models": {
-    "refactor": "premium",
-    "docs": "fast"
-  }
-}</code></pre>
-
-<p>I also keep a <code>.cursorignore</code> file to exclude <code>node_modules</code>, build artifacts, and <code>.env</code> files from indexing—both for speed and security.</p>
-
-<h2>Conclusion</h2>
-
-<p>Getting <strong>Cursor Pro free as a DIU student</strong> was not magic—it was a mix of verifying my academic status, using the tool on real Bornosoft and portfolio code, and staying disciplined about review. If you are studying Software Engineering in Bangladesh and building seriously, student Pro access is one of the highest-leverage investments of time you can make—especially when money is tight.</p>
-
-<p>Start with one project, verify your student status today, and measure whether your weekly shipping speed improves. If it does, keep Pro for the semester you are pushing hardest—final year, internship hunt, or launch month for your startup.</p>
-
-<p>Questions? Reach me via <a href="https://kazinayeem.site">kazinayeem.site</a> or LinkedIn. I am always happy to help fellow DIU builders navigate tools responsibly.</p>`,
-});
-
-// Continue with remaining 24 articles in the same file...
-console.log("Generating articles...");
-let total = 0;
-for (const a of articles) {
-  total += writeArticle(a.index, a.file, a.meta, a.content);
-}
-console.log(`\nGenerated ${articles.length} articles, avg ${Math.round(total / articles.length)} words`);
+export default allBlogPosts;
+`;
+fs.writeFileSync(path.join(__dirname, "../content/blogs/index.ts"), index, "utf8");
+console.log(`Generated ${articles.length} articles`);
