@@ -181,3 +181,27 @@
 ::view-transition-old(root), ::view-transition-new(root) {
     animation: none;
     mix-blend-mode: normal;}
+
+/* Blog callout boxes */
+.blog-prose .callout {
+  @apply my-6 rounded-xl border-l-4 p-4 text-sm leading-relaxed;
+}
+.blog-prose .callout.note {
+  @apply border-blue-500 bg-blue-50 text-blue-900 dark:bg-blue-950/40 dark:text-blue-200;
+}
+.blog-prose .callout.tip {
+  @apply border-green-500 bg-green-50 text-green-900 dark:bg-green-950/40 dark:text-green-200;
+}
+.blog-prose .callout.warning {
+  @apply border-amber-500 bg-amber-50 text-amber-900 dark:bg-amber-950/40 dark:text-amber-200;
+}
+.blog-prose table {
+  @apply my-6 w-full border-collapse overflow-hidden rounded-lg text-sm;
+}
+.blog-prose th,
+.blog-prose td {
+  @apply border border-gray-200 px-4 py-2 dark:border-gray-700;
+}
+.blog-prose th {
+  @apply bg-gray-100 font-semibold dark:bg-gray-800;
+}

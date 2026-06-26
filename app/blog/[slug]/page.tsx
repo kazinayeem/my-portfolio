@@ -15,7 +15,7 @@ import BlogPrevNext from "@/components/blog/BlogPrevNext";
 import BlogComments from "@/components/blog/BlogComments";
 import BlogNewsletter, { BlogCTA } from "@/components/blog/BlogNewsletter";
 import { getAllPosts } from "@/lib/blog/posts";
-import { BLOG_AUTHOR, INTERNAL_LINKS, SITE_URL } from "@/lib/blog/constants";
+import { BLOG_AUTHOR, INTERNAL_LINKS } from "@/lib/blog/constants";
 import {
   getPostBySlug,
   getRelatedPosts,
