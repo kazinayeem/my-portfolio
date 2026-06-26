@@ -1100,3 +1100,421 @@ pm2 startup systemd</code></pre>
 
 <p>Ship your site, point your domain, write the runbook. Details at <a href="https://kazinayeem.site">kazinayeem.site</a>.</p>`,
 });
+
+// Article 11
+articlesPart2.push({
+  index: 11,
+  file: "why-i-chose-golang-backend-development.ts",
+  meta: {
+    slug: "why-i-chose-golang-backend-development",
+    title: "Why I Chose Golang for Backend Development",
+    seoTitle: "Why I Chose Golang for Backend Development | Mohammad Ali Nayeem",
+    subtitle: "Performance, simplicity, and deployability—reasons a Bornosoft founder standardizes on Go for services",
+    description: "Mohammad Ali Nayeem explains why he chose Golang for backend development at Bornosoft—concurrency, static binaries, hiring, and lessons from DIU systems courses.",
+    category: "Golang",
+    tags: ["Golang", "Backend", "Bornosoft", "Software Engineering", "API"],
+    keywords: ["why golang backend", "golang for startups", "go vs node backend", "golang bangladesh developer"],
+    coverImageAlt: "Go gopher mascot beside API architecture diagram",
+    relatedSlugs: ["from-nodejs-to-golang-learning-journey", "my-first-cicd-pipeline-github-actions", "lessons-learned-building-saas-products"],
+    faqs: [
+      { question: "Is Go better than Node.js for APIs?", answer: "Neither is universally better. Go excels at CPU-bound work, predictable memory, and single-binary deploys. Node excels at rapid full-stack iteration and rich npm libraries. Bornosoft uses both intentionally." },
+      { question: "Is Go good for SaaS backends?", answer: "Yes. Many infrastructure and SaaS companies use Go for core services. Pair with Postgres, Redis, and gRPC or REST as needed." },
+      { question: "How hard is Go for DIU students?", answer: "Syntax is small—learnable in days. Idiomatic patterns (interfaces, error handling, project layout) take weeks of practice on real services." },
+      { question: "Does Bornosoft hire Go developers?", answer: "We value engineers who learn quickly. Go experience helps for performance-sensitive services; strong fundamentals matter more than language religion." },
+    ],
+  },
+  content: `<p>When <strong>Bornosoft</strong> graduated from prototypes to services clients depended on nightly, I faced a backend choice that would outlive semester projects. I picked <strong>Golang</strong>. I am <strong>Mohammad Ali Nayeem</strong>, <strong>Software Engineering student at DIU</strong> in Dhaka, Bangladesh—and this article explains <strong>why I chose Go for backend development</strong> without pretending other stacks failed.</p>
+
+<h2>Context: What Bornosoft Needed</h2>
+
+<p>Our workloads mixed public REST APIs, webhook processors, PDF batch jobs, and internal CLIs for DevOps homework turned production scripts. Requirements recurring across clients:</p>
+
+<ul>
+<li>Predictable latency under burst traffic.</li>
+<li>Small deploy artifacts on modest EC2 instances.</li>
+<li>Clear code review for interns from DIU.</li>
+<li>Long-running processes without mysterious memory climbs.</li>
+</ul>
+
+<div class="callout tip"><strong>Tip:</strong> Choose backend language per service boundary, not once for eternity. Monorepos can host Go workers beside Next.js frontends.</div>
+
+<h2>Reason 1: Concurrency Without Drama</h2>
+
+<p>Go's goroutines and channels model concurrent IO—payment webhooks, email queues, file transforms—without callback pyramids. A worker pool in Go reads like the diagram on the whiteboard:</p>
+
+<pre><code class="language-go">for i := 0; i &lt; workerCount; i++ {
+    go func() {
+        for job := range jobs {
+            process(job)
+        }
+    }()
+}</code></pre>
+
+<p>Systems courses at DIU finally mapped to code I shipped the same week.</p>
+
+<h2>Reason 2: Static Binaries Simplify Deploys</h2>
+
+<p><code>GOOS=linux GOARCH=amd64 go build -o api ./cmd/api</code> produces one file I scp to Ubuntu, systemd restart, done. No node_modules sync rituals on 2G hostel connections.</p>
+
+<table>
+<thead><tr><th>Deploy aspect</th><th>Go service</th><th>Typical Node API</th></tr></thead>
+<tbody>
+<tr><td>Artifact</td><td>Single binary</td><td>node_modules + source</td></tr>
+<tr><td>Cold start on t3.small</td><td>Fast</td><td>Acceptable with tuning</td></tr>
+<tr><td>Docker image size</td><td>Small with distroless</td><td>Larger base layers</td></tr>
+</tbody>
+</table>
+
+<h2>Reason 3: Explicit Error Handling</h2>
+
+<p>Verbose <code>if err != nil</code> blocks force error paths visible in review—valuable when Bangladeshi clients trust Bornosoft with operational data. Panics are for truly exceptional cases, not control flow.</p>
+
+<div class="callout note"><strong>Note:</strong> Go 1.13+ error wrapping with <code>%w</code> preserves context for structured logging downstream.</div>
+
+<h2>Reason 4: Standard Library Strength</h2>
+
+<p>HTTP servers, JSON, testing, and tooling ship in the standard library. Fewer dependency surprises than ecosystems where left-pad moments still haunt folklore—though we still vet modules for security.</p>
+
+<h2>Reason 5: Industry Signal for Hiring</h2>
+
+<p>Go appears in job posts from fintech, platform, and DevOps-heavy teams globally and in Dhaka remote markets. Learning Go opened conversations in interviews beyond CRUD in a single framework.</p>
+
+<h2>What Go Does Not Solve</h2>
+
+<ul>
+<li>Frontend—Next.js still powers our UIs.</li>
+<li>Rapid throwaway hackathon UI—Node wins hour one.</li>
+<li>Heavy ML training—Python owns that lane in Bornosoft.</li>
+<li>Magic scaling—bad schema design hurts in any language.</li>
+</ul>
+
+<div class="callout warning"><strong>Warning:</strong> Do not rewrite working Node services to Go without metrics proving pain. Premature rewrites killed weekend plans more than once.</div>
+
+<h2>Bornosoft Service Layout</h2>
+
+<pre><code class="language-text">cmd/
+  api/main.go
+  worker/main.go
+internal/
+  handlers/
+  repository/
+  domain/
+pkg/
+  logger/
+go.mod</code></pre>
+
+<p>Standard layout helps DIU interns navigate repos on day one—README points to <code>cmd/api</code> entry.</p>
+
+<h2>Testing Culture</h2>
+
+<p>Table-driven tests encourage edge case coverage before Bangladesh payment gateway quirks hit production Friday night:</p>
+
+<pre><code class="language-go">func TestCalculateFee(t *testing.T) {
+    tests := []struct{
+        name string
+        amount int64
+        want int64
+    }{
+        {"zero", 0, 0},
+        {"standard", 10000, 150},
+    }
+    for _, tt := range tests {
+        t.Run(tt.name, func(t *testing.T) {
+            got := CalculateFee(tt.amount)
+            if got != tt.want {
+                t.Fatalf("got %d want %d", got, tt.want)
+            }
+        })
+    }
+}</code></pre>
+
+<h2>When I Still Reach for Node.js</h2>
+
+<p>Realtime dashboards with heavy SSR, Prisma migrations tied to Next routes, and client demos where speed beats perf—all remain JavaScript territory. Bilingual architecture is a feature.</p>
+
+<h2>Advice for DIU Students Choosing Go</h2>
+
+<ol>
+<li>Complete A Tour of Go and one small HTTP service.</li>
+<li>Read <em>Effective Go</em> and code review two open source Go repos.</li>
+<li>Benchmark against your Node prototype—numbers beat vibes.</li>
+<li>Contribute a CLI tool to your portfolio—hire managers love usable utilities.</li>
+</ol>
+
+<h2>Conclusion</h2>
+
+<p>I chose <strong>Golang for backend development</strong> at Bornosoft because concurrency clarity, deploy simplicity, and operational honesty matched our client reality from Dhaka. Go did not replace curiosity about other stacks—it channeled energy into services that had to stay up when I was in class.</p>
+
+<p>Evaluate your bottlenecks, prototype in a week, measure, then commit. Debate me at <a href="https://kazinayeem.site">kazinayeem.site</a> with your benchmark charts.</p>`,
+});
+
+// Article 12
+articlesPart2.push({
+  index: 12,
+  file: "lessons-learned-building-saas-products.ts",
+  meta: {
+    slug: "lessons-learned-building-saas-products",
+    title: "Lessons Learned Building SaaS Products",
+    seoTitle: "Lessons Learned Building SaaS Products | Mohammad Ali Nayeem",
+    subtitle: "Hard-won product, technical, and founder lessons from Bornosoft while studying at DIU",
+    description: "Mohammad Ali Nayeem shares lessons learned building SaaS products at Bornosoft—MVP scope, billing, support, tech debt, and student founder realities in Bangladesh.",
+    category: "Software Engineering",
+    tags: ["SaaS", "Startup", "Bornosoft", "Software Engineering", "Product"],
+    keywords: ["building saas lessons", "student founder saas", "saas mvp tips", "bornosoft startup bangladesh"],
+    coverImageAlt: "SaaS dashboard sketch with metrics and user feedback sticky notes",
+    relatedSlugs: ["why-i-chose-golang-backend-development", "my-devops-roadmap-software-engineering-student", "creating-portfolio-ranks-google"],
+    faqs: [
+      { question: "Can a DIU student realistically build SaaS?", answer: "Yes, if scope stays small—one niche, one painful workflow, one pricing experiment. Bornosoft started as focused tools for local businesses, not a global platform day one." },
+      { question: "What tech stack for student SaaS?", answer: "Boring and familiar beats exotic. Next.js, Postgres, Stripe or local payment integrations, Docker, and GitHub Actions carried most Bornosoft MVPs." },
+      { question: "How do you handle support while in class?", answer: "Document FAQs, automate onboarding emails, set office hours for client chat, and under-promise response times you can sustain during exam weeks." },
+      { question: "When to quit a SaaS idea?", answer: "When users will not pay or return after three honest outreach cycles—and you have no differentiated insight left to test. Pivot data, not ego." },
+    ],
+  },
+  content: `<p>Building <strong>SaaS products</strong> while attending lectures, labs, and family obligations in Dhaka taught me lessons no textbook chapter titled. <strong>Bornosoft</strong> began as ambition; it became a catalog of mistakes, small wins, and sustainable habits. I am <strong>Mohammad Ali Nayeem</strong>, <strong>Software Engineering student at DIU</strong>, and these are the <strong>lessons learned building SaaS</strong> that I would hand to my past self.</p>
+
+<h2>Lesson 1: Painful Problems Beat Clever Ideas</h2>
+
+<p>Our early ideas sounded impressive in pitch sentences but solved nobody's urgent pain. Revenue followed when we interviewed shop owners about inventory chaos and built boring CRUD with reliable exports—not AI buzzword wrappers.</p>
+
+<div class="callout tip"><strong>Tip:</strong> Ask will you pay next month before writing auth middleware for the fifteenth time.</div>
+
+<h2>Lesson 2: MVPs Should Embarrass You Slightly</h2>
+
+<p>Perfection delayed launches until competitors with uglier UIs won trust by showing up. Ship manual onboarding, spreadsheet imports, email alerts instead of real-time websockets if that delivers value Monday.</p>
+
+<h3>Scope Checklist We Use Now</h3>
+
+<ul>
+<li>One persona, one job-to-be-done.</li>
+<li>Login, core workflow, export or notification.</li>
+<li>Stripe or local payment link—even if manual reconciliation.</li>
+<li>Terms page and privacy basics—clients in Bangladesh ask.</li>
+</ul>
+
+<h2>Lesson 3: Billing Is Product</h2>
+
+<p>Trials, invoices, failed payment emails, and downgrade paths deserve design love equal to dashboard charts. Churn often traces to billing confusion, not missing features.</p>
+
+<table>
+<thead><tr><th>Billing element</th><th>Why it matters</th></tr></thead>
+<tbody>
+<tr><td>Clear pricing page</td><td>Reduces pre-sales DMs</td></tr>
+<tr><td>Usage limits</td><td>Prevents surprise infra bills</td></tr>
+<tr><td>Dunning emails</td><td>Recovers failed cards</td></tr>
+<tr><td>Annual discount</td><td>Improves cash flow for tiny teams</td></tr>
+</tbody>
+</table>
+
+<h2>Lesson 4: Tech Debt Compounds Silently</h2>
+
+<p>Skipping tests for a DIU deadline haunted us when webhook idempotency bugs duplicated client records. Now every Bornosoft service requires:</p>
+
+<ol>
+<li>CI lint and test on PR.</li>
+<li>Structured logs with request IDs.</li>
+<li>Migration discipline for Postgres.</li>
+<li>Runbook snippet in README.</li>
+</ol>
+
+<div class="callout warning"><strong>Warning:</strong> A student founder doing heroics at 3 AM does not scale. Automate deploys before chasing enterprise features.</div>
+
+<h2>Lesson 5: Support Load Is Real</h2>
+
+<p>Ten active users generated more WhatsApp messages than expected. We added in-app help, Loom walkthroughs in Bangla and English, and office hours after class. Support time is COGS—price accordingly.</p>
+
+<h2>Lesson 6: Multi-Tenancy Can Wait</h2>
+
+<p>Single-tenant deploys for first paying clients taught ops without building complex tenant isolation prematurely. Abstract when second client forces duplication—not before.</p>
+
+<h2>Lesson 7: Marketing While Building</h2>
+
+<p>Portfolio SEO, LinkedIn build logs, and DIU demo days outperformed cold ads on student budgets. Documentation doubles as marketing—this blog included.</p>
+
+<div class="callout note"><strong>Note:</strong> Bangladesh market rewards trust and referrals. Deliver one client exceptionally; ask for introduction.</div>
+
+<h2>Lesson 8: Legal and Tax Basics Early</h2>
+
+<p>Register business entities when revenue stabilizes. Consult local advisors on VAT and invoicing norms. Clients expect professionalism beyond GitHub green squares.</p>
+
+<h2>Lesson 9: Team Boundaries</h2>
+
+<p>Cofounder clarity on equity, roles, and exit scenarios prevents dorm-room fallout. Written agreements feel awkward at nineteen; lawsuits feel worse.</p>
+
+<h2>Lesson 10: Health and Semester Rhythm</h2>
+
+<p>Burnout killed creativity faster than missing one feature. Exam weeks mean support SLAs extend—communicate proactively.</p>
+
+<h2>Stack Reflection</h2>
+
+<p>Next.js admin, Go workers, Postgres, Docker on AWS, GitHub Actions—boring stack, exciting reliability improvements. Fancy microservices waited until metrics justified them.</p>
+
+<h2>Conclusion</h2>
+
+<p>The <strong>lessons learned building SaaS products</strong> at Bornosoft boil down to empathy, scope discipline, and operational respect. DIU gave theory; clients gave truth. If you are a student founder in Bangladesh, build small, invoice early, document loudly, sleep sometimes.</p>
+
+<p>Founder war stories welcome at <a href="https://kazinayeem.site">kazinayeem.site</a>.</p>`,
+});
+
+// Article 13
+articlesPart2.push({
+  index: 13,
+  file: "creating-portfolio-ranks-google.ts",
+  meta: {
+    slug: "creating-portfolio-ranks-google",
+    title: "Creating a Portfolio That Ranks on Google",
+    seoTitle: "Creating a Portfolio That Ranks on Google | Mohammad Ali Nayeem",
+    subtitle: "Technical SEO, content strategy, and performance tactics behind kazinayeem.site",
+    description: "Mohammad Ali Nayeem explains how he built a developer portfolio that ranks on Google—metadata, structured data, blog strategy, Core Web Vitals, and lessons from DIU and Bornosoft.",
+    category: "Tutorials",
+    tags: ["SEO", "Portfolio", "Next.js", "Google", "Web Development"],
+    keywords: ["developer portfolio seo", "portfolio ranks google", "nextjs seo tutorial", "technical seo portfolio site"],
+    coverImageAlt: "Google search results showing developer portfolio and blog articles",
+    relatedSlugs: ["how-i-got-cursor-pro-free-as-diu-student", "deploying-nextjs-aws-ec2-nginx-pm2", "my-devops-roadmap-software-engineering-student"],
+    faqs: [
+      { question: "How long until a new portfolio ranks on Google?", answer: "Indexing can happen in days with sitemap submission and Search Console. Meaningful rankings for competitive keywords take months of consistent content, backlinks, and technical hygiene." },
+      { question: "Do developers need a blog for SEO?", answer: "Not mandatory, but long-form articles targeting problems you solved attract organic traffic recruiters and clients search for—especially combined with structured data." },
+      { question: "What Next.js SEO features matter most?", answer: "Metadata API, semantic HTML, fast LCP, sitemap.xml, robots.txt, canonical URLs, Open Graph tags, and JSON-LD Person/Article schema." },
+      { question: "Should I buy backlinks?", answer: "No. Focus on guest posts, open source contributions, university profiles, and genuine mentions. Toxic links risk penalties." },
+    ],
+  },
+  content: `<p>A portfolio hidden on page four of Google might as well be a PDF emailed to nobody. When I rebuilt <a href="https://kazinayeem.site">kazinayeem.site</a>, ranking was a requirement—not vanity—because <strong>Bornosoft</strong> leads and internship screens start with search. I am <strong>Mohammad Ali Nayeem</strong>, <strong>DIU Software Engineering</strong> student in Bangladesh, and this tutorial covers <strong>creating a portfolio that ranks on Google</strong> with techniques you can replicate on Next.js.</p>
+
+<h2>SEO Goals I Defined</h2>
+
+<ul>
+<li>Rank for branded queries: Mohammad Ali Nayeem, Bornosoft founder.</li>
+<li>Capture long-tail traffic: DIU student DevOps, Bangladesh Next.js developer.</li>
+<li>Convert visitors via clear contact and project CTAs.</li>
+<li>Pass Core Web Vitals on mid-range Android phones common locally.</li>
+</ul>
+
+<div class="callout tip"><strong>Tip:</strong> Write for humans first, search engines second. Google rewards pages that answer real questions—like the blog you are reading.</div>
+
+<h2>Technical Foundation in Next.js App Router</h2>
+
+<pre><code class="language-typescript">export const metadata: Metadata = {
+  title: {
+    default: "Mohammad Ali Nayeem | Software Engineer",
+    template: "%s | Mohammad Ali Nayeem",
+  },
+  description:
+    "Software Engineering student at DIU, Bornosoft founder...",
+  metadataBase: new URL("https://kazinayeem.site"),
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://kazinayeem.site",
+    siteName: "Mohammad Ali Nayeem",
+  },
+  robots: { index: true, follow: true },
+};</code></pre>
+
+<p>Every blog post exports <code>generateMetadata</code> with unique title, description, canonical URL, and OG image from slug.</p>
+
+<h2>Structured Data (JSON-LD)</h2>
+
+<p>Person schema on homepage; Article schema on blog posts; BreadcrumbList for navigation clarity.</p>
+
+<pre><code class="language-json">{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Mohammad Ali Nayeem",
+  "jobTitle": "Software Engineer",
+  "alumniOf": "Daffodil International University",
+  "worksFor": { "@type": "Organization", "name": "Bornosoft" },
+  "url": "https://kazinayeem.site"
+}</code></pre>
+
+<div class="callout note"><strong>Note:</strong> Validate with Google Rich Results Test before requesting indexing in Search Console.</div>
+
+<h2>Content Strategy: Blog as SEO Engine</h2>
+
+<p>Static portfolio pages rank for name queries; articles rank for problems—CI/CD tutorials, Docker guides, student tool reviews. Each post targets one primary keyword cluster with honest experience from DIU and Bornosoft.</p>
+
+<table>
+<thead><tr><th>Content type</th><th>SEO role</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>Pillar guide</td><td>Authority</td><td>DevOps roadmap</td></tr>
+<tr><td>Tutorial</td><td>Long-tail</td><td>Deploy Next.js EC2</td></tr>
+<tr><td>Story</td><td>Trust + shares</td><td>Cursor Pro student journey</td></tr>
+</tbody>
+</table>
+
+<h2>On-Page Checklist</h2>
+
+<ul>
+<li>One H1 per page; logical H2/H3 hierarchy.</li>
+<li>Descriptive alt text on images—not keyword stuffing.</li>
+<li>Internal links between related blog posts.</li>
+<li>FAQ sections with schema where appropriate.</li>
+<li>Readable URLs: <code>/blog/deploying-nextjs-aws-ec2-nginx-pm2</code>.</li>
+</ul>
+
+<h2>Performance and Core Web Vitals</h2>
+
+<p>Google ranks usable sites. Tactics that moved metrics:</p>
+
+<ol>
+<li><code>next/image</code> with proper sizes and WebP/AVIF.</li>
+<li>Font subsetting and <code>display: swap</code>.</li>
+<li>Route-level code splitting by default in App Router.</li>
+<li>CDN or Nginx caching headers for static assets.</li>
+<li>Lazy load below-fold sections—not hero content.</li>
+</ol>
+
+<div class="callout warning"><strong>Warning:</strong> Heavy animation libraries tank LCP. Measure on real devices, not only MacBook Pro on office Wi-Fi.</div>
+
+<h2>Sitemap and robots.txt</h2>
+
+<pre><code class="language-typescript">// app/sitemap.ts
+export default function sitemap(): MetadataRoute.Sitemap {
+  return [
+    { url: "https://kazinayeem.site", lastModified: new Date() },
+    ...posts.map((p) => ({
+      url: \`https://kazinayeem.site/blog/\${p.slug}\`,
+      lastModified: new Date(p.updatedAt),
+    })),
+  ];
+}</code></pre>
+
+<p>Submit sitemap in Google Search Console after deploy. Monitor coverage reports for crawl errors.</p>
+
+<h2>Off-Page Signals</h2>
+
+<ul>
+<li>LinkedIn and GitHub profiles link to canonical domain.</li>
+<li>DIU project showcases and dev community posts.</li>
+<li>Open source README credits.</li>
+<li>Guest answers on Stack Overflow with profile link—sparingly, genuinely.</li>
+</ul>
+
+<h2>Local SEO for Bangladesh</h2>
+
+<p>Mention Dhaka and DIU naturally in about content. Google Business Profile if Bornosoft maintains a physical office—optional for pure personal brands.</p>
+
+<h2>Metrics I Track Monthly</h2>
+
+<ul>
+<li>Search Console impressions and average position per query.</li>
+<li>Organic sessions in analytics.</li>
+<li>CTR from search—rewrite titles underperforming despite impressions.</li>
+<li>Core Web Vitals field data when available.</li>
+</ul>
+
+<h2>Mistakes I Fixed</h2>
+
+<ol>
+<li>Duplicate titles across project pages.</li>
+<li>Missing canonical on paginated blog index.</li>
+<li>Blocking staging accidentally via robots—double-check environments.</li>
+<li>Thin project descriptions—expanded with problem, stack, outcome.</li>
+</ol>
+
+<h2>Conclusion</h2>
+
+<p><strong>Creating a portfolio that ranks on Google</strong> blends Next.js technical SEO, substantive blogging, performance discipline, and patience. kazinayeem.site improves monthly because I treat SEO like observability—measure, iterate, ship content from real engineering work at DIU and Bornosoft.</p>
+
+<p>Build the site, publish ten honest articles, submit sitemap, review Search Console weekly. Your future recruiter search starts with your name—own that results page.</p>
+
+<p>SEO questions? Contact via <a href="https://kazinayeem.site">kazinayeem.site</a>.</p>`,
+});
