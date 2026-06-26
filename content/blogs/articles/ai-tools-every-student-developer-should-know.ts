@@ -153,6 +153,42 @@ RUN npm run build</code></pre>
 <li>Review process before merge</li>
 </ul>
 
+
+<h2>Tool Selection Matrix for Coursework Types</h2>
+
+<table>
+<thead><tr><th>Task</th><th>Recommended Tool</th><th>Caution</th></tr></thead>
+<tbody>
+<tr><td>Data structures assignment</td><td>None or offline only</td><td>Policy risk</td></tr>
+<tr><td>Web project boilerplate</td><td>Cursor/Copilot</td><td>Review security</td></tr>
+<tr><td>Vision labeling scripts</td><td>ChatGPT + manual review</td><td>Hallucinated paths</td></tr>
+<tr><td>DevOps YAML</td><td>Cursor agent</td><td>Validate permissions</td></tr>
+</tbody>
+</table>
+
+<h2>Prompt Engineering for Developers</h2>
+
+<p>Specific prompts beat vague ones. Include stack, constraints, and failure logs. Ask for tradeoffs, not only code. Request test cases alongside implementation.</p>
+
+<pre><code class="language-text">Bad: "fix my API"
+Good: "Express 4 + Prisma, POST /users returns 500 when
+duplicate email; schema attached; suggest fix + test"</code></pre>
+
+<h2>Building Personal AI Policies</h2>
+
+<p>I maintain a private <code>AI-USAGE.md</code> in repos documenting which tools assisted which files. Transparency builds trust with Bornosoft clients and DIU partners.</p>
+
+<div class="callout warning"><strong>Warning:</strong> Some employers ban certain AI tools on client code. Read contracts before indexing proprietary repositories in cloud assistants.</div>
+
+<h2>Measuring Productivity Gains Honestly</h2>
+
+<p>Track weekly: features shipped, bugs introduced, time spent reviewing AI diffs. If review time dominates, tighten prompts or smaller task scopes. AI should reduce toil, not create review debt.</p>
+
+<h2>Community and Open Source AI Tools</h2>
+
+<p>Follow Ultralytics, Hugging Face, and local Bangladesh developer groups sharing responsible AI workflows. Hype cycles pass; communities persist.</p>
+
+
 <h2>Conclusion</h2>
 
 <p>The <strong>AI tools every student developer should know</strong> are not a trophy case of subscriptions—they are a workflow: codebase assistants, conversational planners, doc search, and honest review. I built Bornosoft and my portfolio faster with them, but grades and clients still measure my understanding, not my prompt count.</p>

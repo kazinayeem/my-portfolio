@@ -125,6 +125,42 @@ CMD ["node", "dist/server.js"]</code></pre>
 <li><strong>Do containers include the Linux kernel?</strong> No—they bundle user space.</li>
 </ul>
 
+
+<h2>Storage and Volume Management</h2>
+
+<p>Docker volumes persist database data across container restarts. Bind mounts suit hot-reload dev workflows. VMs use virtual disks managed by hypervisor—different backup semantics.</p>
+
+<pre><code class="language-bash">docker volume create pgdata
+docker run -v pgdata:/var/lib/postgresql/data postgres:16</code></pre>
+
+<h2>Networking Models</h2>
+
+<p>Docker bridge networks isolate compose stacks. VMs get virtual NICs on NAT or bridged modes. Understanding IP assignment prevents "works on my machine" SSH mysteries during DIU labs.</p>
+
+<h2>Windows and macOS Student Setups</h2>
+
+<p>WSL2 integration lets Windows students run Linux containers natively enough for coursework. macOS Docker Desktop file sync can be slow—place node_modules in named volumes as workaround.</p>
+
+<div class="callout tip"><strong>Tip:</strong> Document your OS-specific quirks in repo README—lab partners replicate environments faster.</div>
+
+<h2>Snapshot and Rollback Strategies</h2>
+
+<p>VM snapshots before risky OS upgrades saved my Jenkins lab twice. Docker image tags (<code>api:sha-abc</code>) provide similar rollback for apps—not for persistent DB state without migration discipline.</p>
+
+<h2>Compliance and Licensing Awareness</h2>
+
+<p>Container images bundle OSS licenses. VMs running Windows need proper licensing. Bornosoft client contracts sometimes mandate data residency—VM region choice matters legally, not only technically.</p>
+
+<h2>Hands-On Lab Assignment</h2>
+
+<ol>
+<li>Deploy nginx on Ubuntu VM manually</li>
+<li>Containerize same nginx with custom config</li>
+<li>Benchmark boot time and disk footprint</li>
+<li>Write one-page comparison for class submission</li>
+</ol>
+
+
 <h2>Conclusion</h2>
 
 <p><strong>Docker vs virtual machines</strong> is not either-or for serious engineers. VMs provide isolation and OS flexibility; containers provide density and dev velocity. DIU students should practice both, then choose per workload.</p>

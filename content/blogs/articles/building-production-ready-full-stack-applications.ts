@@ -157,6 +157,52 @@ export const API_URL =
 
 <p>Portfolio depth jumps one level.</p>
 
+
+<h2>Feature Flags and Gradual Rollout</h2>
+
+<p>Even student production apps benefit from toggling risky features. LaunchDarkly is enterprise; simple env-based flags suffice early:</p>
+
+<pre><code class="language-typescript">const enableBeta = process.env.FEATURE_BETA === "true";</code></pre>
+
+<h2>Database Backup Drills</h2>
+
+<p>Monthly restore test from backup to local Docker Postgres—not optional. Bornosoft once assumed backups worked; they did not until tested.</p>
+
+<h2>Incident Response Template</h2>
+
+<ol>
+<li>Acknowledge alert in Slack</li>
+<li>Check recent deploys and error dashboards</li>
+<li>Rollback or hotfix branch</li>
+<li>Postmortem within 48 hours—blameless</li>
+</ol>
+
+<div class="callout note"><strong>Note:</strong> Postmortems are learning gold for DIU portfolios—redact client names, publish sanitized versions.</div>
+
+<h2>Accessibility and Internationalization</h2>
+
+<p>Production includes Bangla/English copy plans, RTL readiness if needed, and keyboard navigation. Lighthouse accessibility audits in CI catch regressions.</p>
+
+<h2>Legal Pages and Compliance</h2>
+
+<p>Privacy policy, terms, cookie notice—for Bornosoft client sites these are contractual. Student portfolios collecting emails need basic GDPR-style disclosure habits even if primarily Bangladesh-focused.</p>
+
+<h2>Performance Budgets</h2>
+
+<table>
+<thead><tr><th>Metric</th><th>Target</th></tr></thead>
+<tbody>
+<tr><td>LCP</td><td>&lt; 2.5s</td></tr>
+<tr><td>API p95</td><td>&lt; 300ms reads</td></tr>
+<tr><td>Error rate</td><td>&lt; 0.1% steady state</td></tr>
+</tbody>
+</table>
+
+<h2>On-Call Realities for Students</h2>
+
+<p>You are your own on-call initially. PagerDuty is overkill; UptimeRobot SMS free tier suffices. Sleep matters—schedule deploys before 10 PM when possible.</p>
+
+
 <h2>Conclusion</h2>
 
 <p><strong>Building production-ready full stack applications</strong> is habits: tests, pipelines, logs, security, docs. Tutorials teach syntax; production teaches responsibility. As a DIU student and Bornosoft founder, I am still refining this checklist—use it as a living document on your repos.</p>

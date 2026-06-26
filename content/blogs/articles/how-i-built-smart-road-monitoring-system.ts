@@ -184,6 +184,44 @@ while True:
 
 <p>Treat calibration UI as first-class. Version datasets like Git tags. Measure in the field, not only on val sets. Pair with a civil engineering or urban planning student if possible—they ask better questions about placement.</p>
 
+
+<h2>Team Roles and DIU Collaboration</h2>
+
+<p>Our team split responsibilities: two members on dataset and labeling, one on inference pipeline, one on API and dashboard, and I coordinated integration. Weekly standups in the DIU lab kept scope visible. GitHub Projects tracked tasks better than WhatsApp threads alone.</p>
+
+<p>Cross-functional friction appeared when API contracts changed without notice. We adopted OpenAPI specs generated from Zod schemas so frontend and backend negotiated against a single file in Git.</p>
+
+<h2>Calibration UI Deep Dive</h2>
+
+<p>Drawing detection zones on a still frame sounds trivial until operators rotate cameras slightly. We built a calibration mode overlaying polygons on a reference image, storing normalized coordinates so resolution changes did not break zones.</p>
+
+<pre><code class="language-typescript">type Zone = {
+  id: string;
+  label: string;
+  points: [number, number][]; // normalized 0-1
+};</code></pre>
+
+<div class="callout tip"><strong>Tip:</strong> Let operators preview counts on recorded clips before enabling live alerts. False alarms erode trust fast.</div>
+
+<h2>Load Testing the Event API</h2>
+
+<p>Before demo day we simulated 50 cameras posting events every two seconds using a k6 script. PostgreSQL indexes on <code>(camera_id, occurred_at)</code> prevented query melts. We added read replicas only on paper for the report—honest about scale limits.</p>
+
+<h2>Future Extensions We Scoped But Deferred</h2>
+
+<ul>
+<li>License plate recognition (legal review needed)</li>
+<li>Predictive congestion ML (insufficient historical data)</li>
+<li>Multi-city federation (ops complexity)</li>
+</ul>
+
+<p>Deferring features disciplined the viva narrative: we shipped core value instead of a wish list.</p>
+
+<h2>Presenting the Project to Faculty</h2>
+
+<p>Our strongest viva slides showed failure cases: rain, night glare, missed rickshaws. Faculty praised reproducible Docker setup and dataset documentation. Grades rewarded engineering process, not only detection percentages.</p>
+
+
 <h2>Conclusion</h2>
 
 <p>Building a <strong>smart road monitoring system</strong> taught me more than any single exam: data ethics, systems integration, and humility before weather. As a DIU student and Bornosoft founder, I am proud of the prototype—not because it solved Dhaka traffic, but because it shipped end-to-end.</p>

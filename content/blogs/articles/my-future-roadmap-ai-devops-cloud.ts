@@ -165,6 +165,47 @@ def train(config_path: str) -> str:
 <li>Stay ethical—especially with vision in public spaces</li>
 </ul>
 
+
+<h2>Networking and Mentorship Goals</h2>
+
+<p>Roadmaps are not solo. I aim for two mentor relationships—one technical senior, one founder-style operator—and peer circles inside DIU and global remote communities. Twitter/X and LinkedIn are noisy; curated newsletters and meetups return better signal.</p>
+
+<h2>Reading List and Continuous Learning</h2>
+
+<ul>
+<li><strong>Books:</strong> Designing Data-Intensive Applications, Site Reliability Engineering (select chapters)</li>
+<li><strong>Papers:</strong> skimming arXiv abstracts for vision trends—not deep diving every week</li>
+<li><strong>Courses:</strong> AWS Skill Builder, Kaggle micro-courses between semesters</li>
+</ul>
+
+<h2>Financial Planning for Tools and Certs</h2>
+
+<p>Exam fees and cloud bills compete with living costs in Dhaka. I budget monthly: one cert fund slice, one cloud experiment cap, reinvest Bornosoft revenue into tools that repay hours.</p>
+
+<div class="callout tip"><strong>Tip:</strong> GitHub Student Pack and AWS Educate credits stretch budgets—verify eligibility each academic year.</div>
+
+<h2>Health and Sustainability</h2>
+
+<p>Five-year roadmaps fail if you burn out in year two. Gym walks, family time, and saying no to bad-fit clients keep Bornosoft compatible with graduation.</p>
+
+<h2>Contributing Back to Bangladesh Tech</h2>
+
+<p>Goals include open datasets (ethics-reviewed), free workshop materials for DIU juniors, and hiring interns from my cohort when Bornosoft scales. Rising tide metaphors are cliché—but local mentorship gaps are real.</p>
+
+<h2>Scenario Planning</h2>
+
+<table>
+<thead><tr><th>Scenario</th><th>Response</th></tr></thead>
+<tbody>
+<tr><td>AI hiring cools</td><td>Double down on DevOps depth</td></tr>
+<tr><td>Remote roles tighten</td><td>Local product companies + consulting</td></tr>
+<tr><td>Bornosoft grows fast</td><td>Defer some certs, hire carefully</td></tr>
+</tbody>
+</table>
+
+<p>Roadmaps should include branches, not only straight lines.</p>
+
+
 <h2>Conclusion</h2>
 
 <p>My <strong>future roadmap in AI, DevOps, and cloud</strong> is a living compass—not a contract. DIU gave foundation; Bornosoft gives practice; the cloud gives scale. I will update this path publicly as I learn, fail, and recalibrate.</p>

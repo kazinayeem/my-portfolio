@@ -208,6 +208,48 @@ describe("POST /api/users", () => {
 
 <p>The smart road monitoring system's event API used these exact patterns. My portfolio contact form backend is a slimmed-down variant. Repetition builds speed without cutting corners.</p>
 
+
+<h2>Versioning and Breaking Changes</h2>
+
+<p>Public APIs need version prefixes (<code>/api/v1</code>) or explicit deprecation headers. Bornosoft clients on slow upgrade cycles appreciated six-month deprecation windows with changelog emails.</p>
+
+<h2>File Uploads and Media Handling</h2>
+
+<p>Multipart uploads belong behind size limits and virus scanning hooks when handling user content. Store blobs in S3-compatible object storage; serve via signed URLs—not through Express memory buffers.</p>
+
+<pre><code class="language-typescript">const upload = multer({
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    if (!allowedMime.includes(file.mimetype)) return cb(new Error("Invalid type"));
+    cb(null, true);
+  },
+});</code></pre>
+
+<h2>Background Jobs</h2>
+
+<p>Email sends, report generation, and webhook retries should not block HTTP threads. BullMQ with Redis is my default for Node services that outgrow homework scale.</p>
+
+<div class="callout tip"><strong>Tip:</strong> Start with inline async jobs plus a dead-letter log table before adopting queues—understand failure modes first.</div>
+
+<h2>API Gateway and Rate Limiting at Scale</h2>
+
+<p>When Bornosoft APIs faced bursty client traffic, we placed NGINX or cloud load balancers in front with rate limits per API key. Express-rate-limit still guards auth endpoints at the app layer.</p>
+
+<h2>Observability Middleware</h2>
+
+<pre><code class="language-typescript">app.use((req, res, next) => {
+  const start = Date.now();
+  res.on("finish", () => {
+    logger.info({ method: req.method, path: req.path, ms: Date.now() - start });
+  });
+  next();
+});</code></pre>
+
+<h2>Interview Preparation From API Work</h2>
+
+<p>DIU students ask how APIs help hiring. Explain idempotency keys for payments, pagination cursors vs offsets, and why 422 beats 400 for validation—interviewers notice practical HTTP literacy.</p>
+
+
 <h2>Conclusion</h2>
 
 <p><strong>Building REST APIs with Node.js</strong> is a craft: predictable structure, validated inputs, honest errors, tested routes, and deployable artifacts. DIU students who master this graduate into interns who do not break production on day one.</p>

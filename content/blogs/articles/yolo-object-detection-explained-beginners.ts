@@ -181,6 +181,56 @@ cap.release()</code></pre>
 <li>Papers (read abstracts first): original YOLO paper for historical context</li>
 </ul>
 
+
+<h2>Debugging Detection Failures in the Field</h2>
+
+<p>When my first YOLO model looked perfect on validation images but failed on live campus footage, I learned that computer vision debugging is forensic work. I exported false positive frames into a folder called <code>hard-negatives</code> and retrained with them weighted higher. I logged per-class precision weekly so regressions after architecture tweaks were obvious.</p>
+
+<p>Common failure modes in Dhaka scenes included: motion blur on auto-rickshaws, partial occlusion behind buses, reflective puddles after rain, and confusing shadows with road cracks. Each required targeted data—not more random images from the internet.</p>
+
+<h3>Label Quality Checklist</h3>
+
+<ul>
+<li>Boxes tight around objects without excessive padding</li>
+<li>Consistent policy for occluded objects (label if &gt;40% visible)</li>
+<li>Same class names across annotators with a shared style guide</li>
+<li>Review 10% of labels blindly each week</li>
+</ul>
+
+<div class="callout tip"><strong>Tip:</strong> Train a tiny model on 50 images before scaling labeling. Bad taxonomy discovered early saves weeks.</div>
+
+<h2>Comparing YOLO to Other Detectors (Student Perspective)</h2>
+
+<table>
+<thead><tr><th>Detector Family</th><th>Speed</th><th>Beginner Friendliness</th></tr></thead>
+<tbody>
+<tr><td>YOLO (Ultralytics)</td><td>Excellent</td><td>High CLI support</td></tr>
+<tr><td>Faster R-CNN</td><td>Slower</td><td>Lower—more plumbing</td></tr>
+<tr><td>SSD</td><td>Good</td><td>Medium</td></tr>
+<tr><td>DETR transformers</td><td>Variable</td><td>Research-oriented</td></tr>
+</tbody>
+</table>
+
+<p>For DIU semester timelines, YOLO wins on documentation and pretrained weights. Explore others in graduate study or research electives.</p>
+
+<h2>Integrating YOLO With Backend Services</h2>
+
+<p>Detection is step one. Bornosoft dashboards needed counts, alerts, and historical charts. I POSTed summarized JSON to Node.js APIs rather than streaming raw tensors. Schema design mattered as much as mAP:</p>
+
+<pre><code class="language-json">{
+  "cameraId": "gate-a",
+  "timestamp": "2025-03-14T10:22:01Z",
+  "counts": { "person": 12, "car": 8, "bus": 2 },
+  "alerts": []
+}</code></pre>
+
+<p>Version your event schema when adding fields—mobile clients and dashboards break silently otherwise.</p>
+
+<h2>Ethics and Public Space Vision</h2>
+
+<p>As a Bangladeshi student, I take consent and retention seriously. Avoid facial recognition in class demos unless ethics-reviewed. Blur faces in stored training samples when possible. Document limitations in viva presentations—professors respect honesty over inflated accuracy claims.</p>
+
+
 <h2>Conclusion</h2>
 
 <p><strong>YOLO object detection</strong> is learnable for beginners who respect data work and metrics. Start with pretrained inference, label a focused dataset, train a nano model, and deploy where your users actually are—Dhaka streets, not only Kaggle thumbnails.</p>

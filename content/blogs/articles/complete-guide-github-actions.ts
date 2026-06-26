@@ -197,6 +197,62 @@ on:
 <li>Dependabot enabled</li>
 </ul>
 
+
+<h2>Pull Request Workflows for DIU Teams</h2>
+
+<p>Actions shine when paired with branch protection: require status checks before merge to <code>main</code>. DIU group projects stopped "push directly and pray" culture once CI blocked broken builds.</p>
+
+<pre><code class="language-yaml">on:
+  pull_request:
+    branches: [main]
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci && npm run lint && npm test</code></pre>
+
+<h2>Artifacts and Caching Build Outputs</h2>
+
+<p>Upload build artifacts for downstream deploy jobs:</p>
+
+<pre><code class="language-yaml">- uses: actions/upload-artifact@v4
+  with:
+    name: dist
+    path: dist/</code></pre>
+
+<p>Artifacts let you deploy exactly what CI built—no rebuild surprises on the server.</p>
+
+<h2>Monorepo Strategies</h2>
+
+<p>Portfolio repos with Next.js web and shared packages benefit from path filters:</p>
+
+<pre><code class="language-yaml">on:
+  push:
+    paths:
+      - "apps/web/**"
+      - "packages/**"</code></pre>
+
+<div class="callout note"><strong>Note:</strong> Nx or Turborepo remote caching is overkill for homework; native npm workspaces plus Actions cache suffices for most students.</div>
+
+<h2>Notifications and Failure Triage</h2>
+
+<p>Configure workflow failure emails or Slack webhooks for Bornosoft production deploys. For class repos, a Discord ping suffices. Include links to failed job logs in messages—future you is tired you.</p>
+
+<h2>Security Hardening for Workflows</h2>
+
+<ul>
+<li>Limit <code>GITHUB_TOKEN</code> permissions per job</li>
+<li>Use environments for production secrets</li>
+<li>Review third-party actions like npm dependencies</li>
+<li>Enable Dependabot for workflow action updates</li>
+</ul>
+
+<h2>Local Act Testing</h2>
+
+<p><code>act</code> runs workflows locally with Docker—useful when iterating YAML without burning minutes. It is not perfect but catches syntax errors early during late-night Dhaka coding sessions.</p>
+
+
 <h2>Conclusion</h2>
 
 <p>A <strong>complete GitHub Actions guide</strong> for students is really a habit guide: test on every PR, build containers you can run locally, deploy with rollback in mind. My DIU coursework improved when professors saw GitHub checks green before grading merges.</p>

@@ -126,6 +126,40 @@ const post = createPost({
 
 <p>Bornosoft is not separate from my education—it is the pressure chamber where deadlines, invoices, and maintainability meet. Every client lesson maps to a course concept eventually.</p>
 
+
+<h2>Semester-by-Semester Project Log</h2>
+
+<p>Keeping a project log helped internships interviews:</p>
+
+<ul>
+<li><strong>Year 1:</strong> CLI tools, basic web pages, Git learning</li>
+<li><strong>Year 2:</strong> Full stack CRUD, database design, Bornosoft landing clients</li>
+<li><strong>Year 3:</strong> YOLO road monitoring, Docker labs, portfolio SEO blog</li>
+</ul>
+
+<h2>Study Groups and Peer Teaching</h2>
+
+<p>Teaching GPIO wiring to juniors solidified my own understanding. DIU study circles for algorithms met twice weekly before midterms—accountability beats solo cramming.</p>
+
+<div class="callout tip"><strong>Tip:</strong> Record short Loom-style walkthroughs of your projects; future you forgets wiring details after holidays.</div>
+
+<h2>Handling Imposter Syndrome</h2>
+
+<p>Social media highlights reels, not retakes. I felt behind classmates with internship logos while I was still learning Docker. Comparison lied—depth on fewer repos mattered more in interviews I actually got.</p>
+
+<h2>Facilities and Lab Resources</h2>
+
+<p>Use campus labs during off-peak hours. Respect equipment sign-out policies. Report broken machines—maintenance backlog hurts everyone. Bring your own SD cards for Pi experiments when possible.</p>
+
+<h2>Planning Life After DIU</h2>
+
+<p>Graduation is not a cliff. I map skills to roles: platform engineer, ML engineer, full stack founder. The map flexes quarterly. Courses provide foundation; side projects provide differentiation.</p>
+
+<h2>Giving Back to the Cohort</h2>
+
+<p>I answer freshmen DMs about tool choices and verification flows (Cursor Pro, GitHub Education). Dhaka's developer community grows when seniors document paths openly—this blog is part of that habit.</p>
+
+
 <h2>Conclusion</h2>
 
 <p>My <strong>Software Engineering journey at DIU</strong> is ongoing. Grades matter; shipped projects matter more for the work I want. If you are in Dhaka reading this between classes, know that consistency over years beats genius weeks—I'm proof in progress, not a finished expert.</p>

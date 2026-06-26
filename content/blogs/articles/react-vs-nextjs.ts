@@ -131,6 +131,45 @@ async function BlogList() {
 
 <p>kazinayeem.site uses App Router, TypeScript blog articles, structured SEO, and static generation—choices aligned with discoverability and performance goals I would not prioritize in a private admin SPA.</p>
 
+
+<h2>State Management in React vs Next.js</h2>
+
+<p>React SPAs often pair with Zustand, Redux Toolkit, or TanStack Query for server state. Next.js App Router encourages fetching on the server and passing props—less client state overall. Overusing global client stores in Next.js fights the framework.</p>
+
+<h2>Styling Approaches</h2>
+
+<ul>
+<li>Tailwind CSS works in both ecosystems</li>
+<li>CSS Modules supported in Next.js without extra config</li>
+<li>Component libraries (shadcn/ui) integrate cleanly with Next</li>
+</ul>
+
+<h2>Authentication Patterns</h2>
+
+<p>Next.js simplifies cookie-based sessions with server components checking auth before render. React SPAs typically use JWT in memory plus refresh dance—doable but more client complexity.</p>
+
+<pre><code class="language-typescript">// Next.js middleware sketch
+export function middleware(req: NextRequest) {
+  if (!req.cookies.get("session")) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+}</code></pre>
+
+<div class="callout note"><strong>Note:</strong> Never store JWTs in localStorage if XSS is in your threat model—HttpOnly cookies prefer server frameworks.</div>
+
+<h2>Bundle Analysis Habits</h2>
+
+<p>Run <code>@next/bundle-analyzer</code> or Vite rollup visualizer each sprint. DIU demos on slow lab PCs reveal bloat classroom Wi-Fi hides on developer MacBooks.</p>
+
+<h2>Migration Story: SPA to Next.js</h2>
+
+<p>I migrated a Bornosoft marketing SPA to Next.js for SEO wins. Steps: extract components, move routes file-by-file, add metadata exports, deploy preview on Vercel. Took two weekends—not a big bang rewrite.</p>
+
+<h2>Framework Churn Advice</h2>
+
+<p>React 19 and Next.js releases will continue. Learn stable concepts—components, routing, data fetching boundaries—so release notes are diffs, not earthquakes.</p>
+
+
 <h2>Conclusion</h2>
 
 <p><strong>React vs Next.js</strong> is order of operations: learn React deeply, adopt Next.js when SEO, routing, and full-stack colocation help your product. For DIU coursework demos, either works—match the rubric and your deployment budget.</p>

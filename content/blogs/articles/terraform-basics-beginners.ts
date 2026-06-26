@@ -164,6 +164,54 @@ output "bucket_name" {
 <li>Policy as code (OPA/Sentinel) in enterprise</li>
 </ul>
 
+
+<h2>Import and Target Blocks</h2>
+
+<p>Splitting infrastructure across files improves readability:</p>
+
+<pre><code class="language-hcl"># networking.tf
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+}
+
+# compute.tf
+resource "aws_instance" "app" {
+  ami           = var.ami_id
+  instance_type = "t3.micro"
+  subnet_id     = aws_subnet.public.id
+}</code></pre>
+
+<h2>Data Sources vs Resources</h2>
+
+<p>Data sources read existing infrastructure (latest AMI IDs, caller identity). Resources create or mutate. Confusing them causes plan surprises.</p>
+
+<h2>Lifecycle Meta-Arguments</h2>
+
+<pre><code class="language-hcl">resource "aws_instance" "app" {
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes  = [ami]
+  }
+}</code></pre>
+
+<div class="callout warning"><strong>Warning:</strong> prevent_destroy saves production; remove it on throwaway lab instances or cleanup gets annoying.</div>
+
+<h2>Formatting and Validation</h2>
+
+<pre><code class="language-bash">terraform fmt -recursive
+terraform validate</code></pre>
+
+<p>Add pre-commit hooks in team Bornosoft repos so formatting debates never reach PR comments.</p>
+
+<h2>Drift Detection</h2>
+
+<p>Manual console edits cause drift—Terraform wants to revert them on next apply. Run scheduled <code>terraform plan</code> in CI read-only mode for staging accounts.</p>
+
+<h2>Cost Estimation Tools</h2>
+
+<p>Use Infracost in PR comments for awareness. Students still delete resources after labs—I set calendar reminders every Sunday during AWS experiment weeks.</p>
+
+
 <h2>Conclusion</h2>
 
 <p><strong>Terraform basics</strong>—providers, resources, variables, state, plan/apply—are the foundation of modern DevOps careers. DIU students pairing Terraform with AWS free tier learn more than reading slides alone.</p>
