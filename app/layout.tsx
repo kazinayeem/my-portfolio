@@ -23,7 +23,7 @@ export const metadata = {
     locale: "en_US",
     url: "https://nayeem.dev",
     siteName: "Mohammad Ali Nayeem Portfolio",
-    title: "Mohammad Ali Nayeem | Software Engineer & Full Stack Developer",
+    title: "Mohammad Ali Nayeem | Software Engineer | Full Stack Developer | DevOps Enthusiast",
     description: "Full Stack Developer & SWE Student specializing in React, Next.js, Node.js. Building modern web applications with clean code practices.",
     images: [
       {

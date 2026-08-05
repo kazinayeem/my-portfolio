@@ -10,7 +10,7 @@ export const BLOG_AUTHOR: BlogAuthor = {
     "AI Engineer",
     "DevOps Engineer",
     "Full Stack Developer",
-    "Robotics Enthusiast",
+    "MLops",
   ],
   bio: "Software Engineering student at Daffodil International University (DIU), founder of Bornosoft, and passionate builder exploring AI, DevOps, cloud infrastructure, and robotics. I write about lessons from real projects, student developer journeys, and practical engineering guides.",
   avatar: "/myimage.png",
